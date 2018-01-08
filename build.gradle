@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.2.11'
+        kotlinVersion = '1.2.10'
         springBootVersion = '2.0.0.M7'
     }
     repositories {
@@ -64,7 +64,7 @@ dependencies {
 //    }
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
     testRuntime("org.junit.platform:junit-platform-engine")
-    testRuntime("org.junit.platform:junit-platform-launcher")
+//    testRuntime("org.junit.platform:junit-platform-launcher")
 
 
     testCompile 'org.assertj:assertj-core:3.9.0'
