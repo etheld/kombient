@@ -1,6 +1,6 @@
 package kombient.movies.repository
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 import javax.persistence.*
 
@@ -14,7 +14,7 @@ data class Rating(
         val date: Date = Date())
 
 
-interface RatingsRepository : CrudRepository<Rating, Long> {
+interface RatingsRepository : JpaRepository<Rating, Long> {
     fun findByName(name: String): List<Rating>
     fun findByImdbId(imdb_id: String): List<Rating>
 }

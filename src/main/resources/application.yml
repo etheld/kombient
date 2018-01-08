@@ -9,11 +9,11 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
   datasource:
-    url: redacted
-    username: redacted
-    password: redacted
+#    url: redacted
+#    username: redacted
+#    password: redacted
     driver-class-name: org.postgresql.Driver
 
-slackBotToken: redacted
-omdbApiKey: redacted
-tmdbApiKey: redacted
+#slackBotToken: redacted
+#omdbApiKey: redacted
+#tmdbApiKey: redacted
