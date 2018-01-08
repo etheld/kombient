@@ -1,8 +1,8 @@
-package kombient.movieenricher
+package kombient.movies.movieenricher
 
 import com.google.common.base.Joiner
-import kombient.imdb.ImdbClient
-import kombient.repository.RatingsRepository
+import kombient.movies.imdb.ImdbClient
+import kombient.movies.repository.RatingsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 

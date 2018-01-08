@@ -1,4 +1,4 @@
-package kombient.repository
+package kombient.movies.repository
 
 import org.springframework.data.repository.CrudRepository
 import java.util.*

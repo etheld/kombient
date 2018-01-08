@@ -12,9 +12,9 @@ import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.WebSocketSession
 import java.util.regex.Matcher
-import kombient.imdb.ImdbService
-import kombient.movieenricher.MovieUserRatingService
-import kombient.tmdb.TmdbService
+import kombient.movies.imdb.ImdbService
+import kombient.movies.movieenricher.MovieUserRatingService
+import kombient.movies.imdb.tmdb.TmdbService
 
 @Component
 @PropertySource("classpath:application.yml")

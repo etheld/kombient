@@ -1,9 +1,8 @@
-package kombient.imdb
+package kombient.movies.imdb
 
 import feign.Param
 import feign.RequestLine
 import java.util.*
-import javax.ws.rs.PathParam
 
 interface ImdbClient {
     @RequestLine("GET /?apikey={apiKey}&i={imdbId}")
