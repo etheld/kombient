@@ -1,0 +1,19 @@
+rtmUrl: https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads
+logging.level.kotlin: DEBUG
+logging.level.me.ramswaroop: DEBUG
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+  datasource:
+    url: redacted
+    username: redacted
+    password: redacted
+    driver-class-name: org.postgresql.Driver
+
+slackBotToken: redacted
+omdbApiKey: redacted
+tmdbApiKey: redacted
