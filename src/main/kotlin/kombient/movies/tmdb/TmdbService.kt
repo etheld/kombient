@@ -1,4 +1,4 @@
-package kombient.movies.imdb.tmdb
+package kombient.movies.tmdb
 
 import feign.Feign
 import feign.Logger

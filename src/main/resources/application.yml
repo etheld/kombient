@@ -17,3 +17,6 @@ spring:
 slackBotToken: ${slackBotToken:redacted}
 omdbApiKey: ${omdbApiKey:redacted}
 tmdbApiKey: ${tmdbApiKey:redacted}
+spring.autoconfigure.exclude:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration

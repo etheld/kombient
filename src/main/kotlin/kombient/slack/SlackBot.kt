@@ -14,7 +14,7 @@ import org.springframework.web.socket.WebSocketSession
 import java.util.regex.Matcher
 import kombient.movies.imdb.ImdbService
 import kombient.movies.movieenricher.MovieUserRatingService
-import kombient.movies.imdb.tmdb.TmdbService
+import kombient.movies.tmdb.TmdbService
 
 @Component
 @PropertySource("classpath:application.yml")
@@ -62,8 +62,8 @@ class SlackBot : Bot() {
         }
     }
 
-    @Controller(events = [EventType.MESSAGE], pattern = "^!im (tt.*)")
-    fun onImdbTT(session: WebSocketSession, event: Event, matcher: Matcher) {
+//    @Controller(events = [EventType.MESSAGE], pattern = "^!im (tt.*)")
+//    fun onImdbTT(session: WebSocketSession, event: Event, matcher: Matcher) {
 //        reply(session, event, Message("yolo"))
 //        if (session.id == "0") {
 //            reply(session, event, Message("bu"))
@@ -74,6 +74,6 @@ class SlackBot : Bot() {
 //            imdbService.getMovieById(matcher.group(1))
 //        }
 //        stopConversation(event)
-    }
+//    }
 
 }
