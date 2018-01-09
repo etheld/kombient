@@ -1,6 +1,6 @@
 package kombient.movies.imdb
 
-import kombient.slack.Application
+import kombient.Application
 import kombient.movies.tmdb.TmdbService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
