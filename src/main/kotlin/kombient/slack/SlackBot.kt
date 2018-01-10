@@ -42,20 +42,18 @@ class SlackBot : Bot() {
 
     @Controller(events = [EventType.MESSAGE], pattern = "^!imdb (.*)")
     fun onImdb(session: WebSocketSession, event: Event, matcher: Matcher) {
-        if (session.id == "0") {
-            val movieTitleQuery = matcher.group(1)
+        val movieTitleQuery = matcher.group(1)
 
-            val movieSearchResult = tmdbService.findMovie(movieTitleQuery)
+        val movieSearchResult = tmdbService.findMovie(movieTitleQuery)
 
-            val tmdbMovie = tmdbService.getMovieById(movieSearchResult.results.first().id)
-            val imdbMovie = imdbService.getMovieById(tmdbMovie.imdb_id)
+        val tmdbMovie = tmdbService.getMovieById(movieSearchResult.results.first().id)
+        val imdbMovie = imdbService.getMovieById(tmdbMovie.imdb_id)
 
-            val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbMovie)
+        val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbMovie)
 
-            val message = Message(String.format("[IMDb] %s(%d) %.1f/10 from %d votes %s [%s] http://www.imdb.com/title/%s %s", imdbMovie.Title, imdbMovie.Year, imdbMovie.imdbRating, imdbMovie.imdbVotes.replace(",","").toInt(), imdbMovie.Runtime, imdbMovie.Genre, imdbMovie.imdbID, ratingText))
+        val message = Message(String.format("[IMDb] %s(%d) %.1f/10 from %d votes %s [%s] http://www.imdb.com/title/%s %s", imdbMovie.Title, imdbMovie.Year, imdbMovie.imdbRating, imdbMovie.imdbVotes.replace(",", "").toInt(), imdbMovie.Runtime, imdbMovie.Genre, imdbMovie.imdbID, ratingText))
 
-            reply(session, event, message)
-        }
+        reply(session, event, message)
     }
 
 //    @Controller(events = [EventType.MESSAGE], pattern = "^!im (tt.*)")
