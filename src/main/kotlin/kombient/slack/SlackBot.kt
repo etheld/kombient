@@ -51,7 +51,17 @@ class SlackBot : Bot() {
 
         val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbMovie)
 
-        val message = Message(String.format("[IMDb] %s(%d) %.1f/10 from %d votes %s [%s] http://www.imdb.com/title/%s %s", imdbMovie.Title, imdbMovie.Year, imdbMovie.imdbRating, imdbMovie.imdbVotes.replace(",", "").toInt(), imdbMovie.Runtime, imdbMovie.Genre, imdbMovie.imdbID, ratingText))
+        val messageFormat = String.format("[IMDb] %s(%d) %.1f/10 from %d votes %s [%s] http://www.imdb.com/title/%s %s",
+                imdbMovie.Title,
+                imdbMovie.Year,
+                imdbMovie.imdbRating,
+                imdbMovie.imdbVotes.replace(",", "").toInt(),
+                imdbMovie.Runtime,
+                imdbMovie.Genre,
+                imdbMovie.imdbID,
+                ratingText)
+
+        val message = Message(messageFormat)
 
         reply(session, event, message)
     }
