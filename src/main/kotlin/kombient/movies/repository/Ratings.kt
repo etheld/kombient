@@ -2,7 +2,12 @@ package kombient.movies.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table(name = "imdb_ratings")

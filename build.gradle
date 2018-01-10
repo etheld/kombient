@@ -70,7 +70,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile('org.springframework.boot:spring-boot-starter-data-rest')
-    runtime('org.springframework.boot:spring-boot-devtools')
+//    runtime('org.springframework.boot:spring-boot-devtools')
 
 
 //    testCompile("org.springframework.boot:spring-boot-starter-test") {
@@ -79,7 +79,6 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
     testRuntime("org.junit.platform:junit-platform-engine")
 //    testRuntime("org.junit.platform:junit-platform-launcher")
-
 
     testCompile 'org.assertj:assertj-core:3.9.0'
     testCompile("org.junit.jupiter:junit-jupiter-api")
