@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 
 
 @SpringBootApplication(scanBasePackages = ["kombient", "me.ramswaroop.jbot"])
-class Application
+open class Application
 
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
