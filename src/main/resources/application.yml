@@ -17,3 +17,4 @@ spring:
 slackBotToken: ${slackBotToken:redacted}
 omdbApiKey: ${omdbApiKey:redacted}
 tmdbApiKey: ${tmdbApiKey:redacted}
+logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
