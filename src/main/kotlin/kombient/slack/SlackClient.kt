@@ -1,6 +1,7 @@
 package kombient.slack
 
 import feign.Feign
+import feign.Param
 import feign.RequestLine
 import feign.gson.GsonDecoder
 import org.springframework.beans.factory.annotation.Value
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component
 interface SlackAPI {
 
     @RequestLine("POST /api/chat.postMessage?token={token}&channel={channel}&text={text}")
-    fun postMessage(token: String, channel: String, text: String)
+    fun postMessage(@Param("token") token: String, @Param("channel") channel: String, @Param("text") text: String)
 }
 
 @Component
