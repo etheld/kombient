@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.web.filter.CommonsRequestLoggingFilter
 
 
-
-
-@SpringBootApplication(scanBasePackages = ["kombient", "me.ramswaroop.jbot"])
+@SpringBootApplication(scanBasePackages = ["kombient"])
 open class Application {
     @Bean
     open fun logFilter(): CommonsRequestLoggingFilter {

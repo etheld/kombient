@@ -82,7 +82,6 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "me.ramswaroop.jbot:jbot:3.0.2"
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile('org.springframework.cloud:spring-cloud-starter-openfeign')
