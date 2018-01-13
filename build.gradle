@@ -89,6 +89,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
 //    runtime('org.springframework.boot:spring-boot-devtools')
 
 //    testCompile("org.springframework.boot:spring-boot-starter-test") {
