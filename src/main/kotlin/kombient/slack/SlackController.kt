@@ -29,7 +29,7 @@ class SlackController {
     private lateinit var slackClient: SlackClient
 
     @Autowired
-    private lateinit var convertService : ConvertService
+    private lateinit var convertService: ConvertService
 
     val executor: ExecutorService = Executors.newFixedThreadPool(5)
 
@@ -44,7 +44,8 @@ class SlackController {
         executor.submit({
             if (convertMatch != null) {
                 val (input) = convertMatch.destructured
-                convertService.convert(input)
+                val message = convertService.convert(input).toString()
+                slackClient.sendMessage(event.event.channel, message)
             }
             if (imdbMatch != null) {
                 val (title) = imdbMatch.destructured

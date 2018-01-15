@@ -16,6 +16,7 @@ spring:
 slackBotToken: ${slackBotToken:redacted}
 omdbApiKey: ${omdbApiKey:redacted}
 tmdbApiKey: ${tmdbApiKey:redacted}
+wolframAlphaAppId: ${wolframAlphaAppId:redacted}
 logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 management:
   endpoints:
