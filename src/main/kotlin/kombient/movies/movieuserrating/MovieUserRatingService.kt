@@ -1,4 +1,4 @@
-package kombient.movies.movieenricher
+package kombient.movies.movieuserrating
 
 import com.google.common.base.Joiner
 import kombient.movies.imdb.ImdbClient
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class MovieUserRatingService {
+
     @Autowired
     private lateinit var ratingRepository : RatingsRepository
 

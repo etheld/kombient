@@ -1,16 +1,15 @@
 package kombient.slack
 
 import kombient.movies.imdb.ImdbService
-import kombient.movies.movieenricher.MovieUserRatingService
+import kombient.movies.movieuserrating.MovieUserRatingService
 import kombient.movies.tmdb.TmdbService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
+
 
 data class Event(
         val type: String = "",
@@ -21,7 +20,6 @@ data class Event(
         val event_ts: String = ""
 )
 
-@NoArg
 data class SlackEvent(
         val token: String = "",
         val challenge: String = "",

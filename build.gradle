@@ -28,10 +28,6 @@ apply plugin: 'kotlin-noarg'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-noArg {
-    annotation("kombient.slack.NoArg")
-}
-
 detekt {
     version = "1.0.0.RC6-1"
     profile("main") {
@@ -58,6 +54,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         javaParameters = true
     }
 }
+
+
 idea {
     module {
         downloadJavadoc = true // defaults to false
@@ -73,6 +71,10 @@ repositories {
 
 ext {
     springCloudVersion = 'Finchley.M5'
+}
+
+bootRun {
+    systemProperties System.properties
 }
 
 dependencies {

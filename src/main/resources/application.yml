@@ -1,6 +1,5 @@
 rtmUrl: https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads
 logging.level.kotlin: DEBUG
-logging.level.me.ramswaroop: DEBUG
 
 spring:
   jpa:
@@ -9,12 +8,25 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
   datasource:
-    url: ${jdbcUrl:redacted}
-    username: ${jdbcUsername:redacted}
-    password: ${jdbcPassword:redacted}
+    url: redacted
+    username: redacted
+    password: redacted
     driver-class-name: org.postgresql.Driver
 
-slackBotToken: ${slackBotToken:redacted}
-omdbApiKey: ${omdbApiKey:redacted}
-tmdbApiKey: ${tmdbApiKey:redacted}
+slackBotToken: redacted
+omdbApiKey: redacted
+tmdbApiKey: redacted
 logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+management:
+  endpoints:
+    web:
+      expose:
+        - info
+        - health
+  endpoint:
+    health:
+      show-details: true
+  health:
+    defaults: true
+    enabled: true
+    show-details: true
