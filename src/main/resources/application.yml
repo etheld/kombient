@@ -8,14 +8,14 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
   datasource:
-    url: redacted
-    username: redacted
-    password: redacted
+    url: ${jdbcUrl:redacted}
+    username: ${jdbUsername:redacted}
+    password: ${jdbcPassword:redacted}
     driver-class-name: org.postgresql.Driver
 
-slackBotToken: redacted
-omdbApiKey: redacted
-tmdbApiKey: redacted
+slackBotToken: ${slackBotToken:redacted}
+omdbApiKey: ${omdbApiKey:redacted}
+tmdbApiKey: ${tmdbApiKey:redacted}
 logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 management:
   endpoints:
