@@ -9,7 +9,7 @@ spring:
           use_jdbc_metadata_defaults: false
   datasource:
     url: ${jdbcUrl:redacted}
-    username: ${jdbUsername:redacted}
+    username: ${jdbcUsername:redacted}
     password: ${jdbcPassword:redacted}
     driver-class-name: org.postgresql.Driver
 
