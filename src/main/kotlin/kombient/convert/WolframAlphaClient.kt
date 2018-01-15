@@ -2,7 +2,6 @@ package kombient.convert
 
 import feign.Param
 import feign.RequestLine
-import javax.print.attribute.IntegerSyntax
 
 data class WolframSubPod(
         val title: String,
@@ -33,6 +32,6 @@ data class WolframResult(
 )
 
 interface WolframAlphaClient {
-    @RequestLine("/v2/query?input={input}&format=image,plaintext&output=JSON&appid=DEMO")
+    @RequestLine("GET /v2/query?input={input}&format=image,plaintext&output=JSON&appid=DEMO")
     fun convert(@Param("input") input: String): WolframResult
 }
