@@ -27,8 +27,8 @@ class ImdbService {
         return imdbClient.getMovieById(imdbId, apiKey)
     }
 
-    fun getLastMovieRatingsForUser(user: String): String {
-        val findLastVotesForUser = ratingRepository.findLastVotesForUser(user, PageRequest.of(1, 10))
+    fun getLastMovieRatingsForUser(num: Int, user: String): String {
+        val findLastVotesForUser = ratingRepository.findLastVotesForUser(user, PageRequest.of(1, num))
 
         if (findLastVotesForUser.isEmpty()) {
             return "Could not find any ratings for $user"
