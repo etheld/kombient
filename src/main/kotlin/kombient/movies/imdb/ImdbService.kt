@@ -30,7 +30,7 @@ class ImdbService {
     fun getLastMovieRatingsForUser(user: String): String {
         return ratingRepository.findLastVotesForUser(user, PageRequest.of(1, 10))
                 .joinToString(separator = ",") { rating ->
-                    String.format("%s %d", rating.title.title, rating.vote)
+                    String.format("%s (%d)", rating.title.title, rating.vote)
                 }
     }
 }
