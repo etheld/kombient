@@ -37,11 +37,17 @@ class SlackController {
     fun event(@RequestBody event: SlackEvent): String {
 
         val imdbMatch = Regex("!imdb (.+)").matchEntire(event.event.text)
+        val imdbLastMatch = Regex("!last (.+)").matchEntire(event.event.text)
         val convertMatch = Regex("!convert (.+)").matchEntire(event.event.text)
 
 
 
         executor.submit({
+            if (imdbLastMatch != null) {
+                val (input) = imdbLastMatch.destructured
+                val message = imdbService.getLastMovieRatingsForUser(input)
+                slackClient.sendMessage(event.event.channel, message)
+            }
             if (convertMatch != null) {
                 val (input) = convertMatch.destructured
                 val message = convertService.convert(input).toString()

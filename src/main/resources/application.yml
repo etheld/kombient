@@ -5,6 +5,10 @@ spring:
   jpa:
     properties:
       hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+        type: trace
         temp:
           use_jdbc_metadata_defaults: false
   datasource:
@@ -31,3 +35,9 @@ management:
     defaults: true
     enabled: true
     show-details: true
+
+#show sql statement
+logging.level.org.hibernate.SQL: debug
+
+#show sql values
+logging.level.org.hibernate.type.descriptor.sql: trace
