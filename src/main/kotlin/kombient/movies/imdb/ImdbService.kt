@@ -29,12 +29,12 @@ class ImdbService {
 
     fun getLastMovieRatingsForUser(user: String): String {
         val findLastVotesForUser = ratingRepository.findLastVotesForUser(user, PageRequest.of(1, 10))
-        
+
         if (findLastVotesForUser.isEmpty()) {
             return "Could not find any ratings for $user"
         }
         return findLastVotesForUser
-                .joinToString(separator = ",") { rating ->
+                .joinToString(separator = ", ") { rating ->
                     String.format("%s (%d)", rating.title.title, rating.vote)
                 }
     }
