@@ -89,6 +89,8 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-openfeign')
     compile('io.github.openfeign:feign-gson:9.5.1')
 
+    compile 'org.zalando:logbook-spring-boot-starter:+'
+
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile('org.springframework.boot:spring-boot-starter-data-rest')
     compile("org.springframework.boot:spring-boot-starter-actuator")

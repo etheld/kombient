@@ -5,33 +5,22 @@ import kombient.movies.imdb.ImdbService
 import kombient.movies.movieuserrating.MovieUserRatingService
 import kombient.movies.tmdb.TmdbService
 import kombient.slack.data.SlackEvent
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.task.TaskExecutor
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 
 @RestController
-class SlackController {
+class SlackController(
+        val imdbService: ImdbService,
+        val tmdbService: TmdbService,
+        val movieUserRatingService: MovieUserRatingService,
+        val slackService: SlackService,
+        val convertService: ConvertService,
+        val executor: TaskExecutor
+) {
 
-    @Autowired
-    private lateinit var imdbService: ImdbService
-
-    @Autowired
-    private lateinit var tmdbService: TmdbService
-
-    @Autowired
-    private lateinit var movieUserRatingService: MovieUserRatingService
-
-    @Autowired
-    private lateinit var slackClient: SlackClient
-
-    @Autowired
-    private lateinit var convertService: ConvertService
-
-    val executor: ExecutorService = Executors.newFixedThreadPool(5)
 
     @RequestMapping("/api/events")
     fun event(@RequestBody event: SlackEvent): String {
@@ -41,17 +30,16 @@ class SlackController {
         val convertMatch = Regex("!convert (.+)").matchEntire(event.event.text)
 
 
-
-        executor.submit({
+        executor.execute({
             if (imdbLastMatch != null) {
                 val (num, title) = imdbLastMatch.destructured
                 val message = imdbService.getLastMovieRatingsForUser(num.toIntOrNull() ?: 10, title)
-                slackClient.sendMessage(event.event.channel, message)
+                slackService.sendMessage(event.event.channel, message)
             }
             if (convertMatch != null) {
                 val (input) = convertMatch.destructured
                 val message = convertService.convert(input)
-                slackClient.sendMessage(event.event.channel, message)
+                slackService.sendMessage(event.event.channel, message)
             }
             if (imdbMatch != null) {
                 val (title) = imdbMatch.destructured
@@ -73,7 +61,7 @@ class SlackController {
                         imdbMovie.imdbID,
                         ratingText)
 
-                slackClient.sendMessage(event.event.channel, messageFormat)
+                slackService.sendMessage(event.event.channel, messageFormat)
 
             }
         })

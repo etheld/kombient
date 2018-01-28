@@ -40,7 +40,10 @@ data class WolframResult(
 )
 
 interface WolframAlphaClient {
-    @RequestLine("GET /v2/query?input={input}&format=image,plaintext&output=JSON&appid={appId}")
-    fun convert(@Param("input") input: String, @Param("appId") appId: String): WolframResult
+    @RequestLine("GET /v2/query?format=image,plaintext&output=JSON&appid={appId}&input={input}")
+    fun convert(
+            @Param("input") input: String,
+            @Param("appId") appId: String
+    ): WolframResult
 
 }

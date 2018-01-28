@@ -1,15 +1,39 @@
 package kombient
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.cloud.netflix.feign.EnableFeignClients
 import org.springframework.context.annotation.Bean
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.web.filter.CommonsRequestLoggingFilter
-
+import org.zalando.logbook.Conditions
+import org.zalando.logbook.JsonHttpLogFormatter
+import org.zalando.logbook.Logbook
 
 @SpringBootApplication(scanBasePackages = ["kombient"])
-open class Application {
+@EnableFeignClients
+class Application {
+
     @Bean
-    open fun logFilter(): CommonsRequestLoggingFilter {
+    fun taskExecutor(): ThreadPoolTaskExecutor {
+        val threadPoolTaskExecutor = ThreadPoolTaskExecutor()
+        threadPoolTaskExecutor.corePoolSize = 5
+        threadPoolTaskExecutor.maxPoolSize = 10
+        threadPoolTaskExecutor.setWaitForTasksToCompleteOnShutdown(true)
+        return threadPoolTaskExecutor
+    }
+
+    @Bean
+    fun logger(mapper: ObjectMapper): Logbook {
+        return Logbook.builder()
+                .condition(Conditions.requestTo("/client/**"))
+                .formatter(JsonHttpLogFormatter())
+                .build()
+    }
+
+    @Bean
+    fun logFilter(): CommonsRequestLoggingFilter {
         val filter = CommonsRequestLoggingFilter()
         filter.setIncludeQueryString(true)
         filter.setIncludePayload(true)

@@ -1,20 +1,24 @@
 package kombient.movies.tmdb
 
-import feign.Param
-import feign.RequestLine
+import org.springframework.cloud.netflix.feign.FeignClient
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 
+@FeignClient(name = "tmdb", url = "https://api.themoviedb.org")
 interface TmdbClient {
-    @RequestLine("GET /3/search/movie?api_key={apiKey}&language=en-US&query={title}&page=1&include_adult=false")
+
+    @GetMapping("GET /3/search/movie?language=en-US&page=1&include_adult=false")
     fun searchMovieByTitle(
-            @Param("title") title: String,
-            @Param("apiKey") apiKey: String
+            @RequestParam("title") title: String,
+            @RequestParam("apiKey") apiKey: String
     ): TmdbSearchResult
 
-    @RequestLine("GET /3/movie/{id}?api_key={apiKey}")
+    @GetMapping("GET /3/movie/{id}")
     fun getMovieById(
-            @Param("id") id: Int,
-            @Param("apiKey") apiKey: String
-    ) : TmdbMovie
+            @PathVariable("id") id: Int,
+            @RequestParam("apiKey") apiKey: String
+    ): TmdbMovie
 
     data class TmdbMovie(
             val id: Int,

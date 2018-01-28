@@ -1,13 +1,15 @@
 package kombient.movies.imdb
 
-import feign.Param
-import feign.RequestLine
+import org.springframework.cloud.netflix.feign.FeignClient
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 
+@FeignClient(name = "omdb", url = "https://www.omdbapi.com/")
 interface ImdbClient {
-    @RequestLine("GET /?apikey={apiKey}&i={imdbId}")
+    @GetMapping("/")
     fun getMovieById(
-            @Param("imdbId") imdbId: String,
-            @Param("apiKey") apiKey: String
+            @RequestParam("imdbId") imdbId: String,
+            @RequestParam("apiKey") apiKey: String
     ): ImdbMovie
 
     data class ImdbMovie(
