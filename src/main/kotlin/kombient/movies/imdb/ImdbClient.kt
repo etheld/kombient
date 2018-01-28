@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam
 interface ImdbClient {
     @GetMapping("/")
     fun getMovieById(
-            @RequestParam("imdbId") imdbId: String,
-            @RequestParam("apiKey") apiKey: String
+            @RequestParam("i") imdbId: String,
+            @RequestParam("apikey") apiKey: String
     ): ImdbMovie
 
     data class ImdbMovie(
