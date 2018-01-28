@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(name = "tmdb", url = "https://api.themoviedb.org")
 interface TmdbClient {
 
-    @GetMapping("GET /3/search/movie?language=en-US&page=1&include_adult=false")
+    @GetMapping("/3/search/movie?language=en-US&page=1&include_adult=false")
     fun searchMovieByTitle(
             @RequestParam("title") title: String,
             @RequestParam("apiKey") apiKey: String
     ): TmdbSearchResult
 
-    @GetMapping("GET /3/movie/{id}")
+    @GetMapping("/3/movie/{id}")
     fun getMovieById(
             @PathVariable("id") id: Int,
             @RequestParam("apiKey") apiKey: String
