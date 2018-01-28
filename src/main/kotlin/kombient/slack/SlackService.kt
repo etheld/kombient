@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(name = "slack", url = "https://slack.com")
 interface SlackClient {
 
-    @PostMapping("/client/chat.postMessage")
+    @PostMapping("/api/chat.postMessage")
     fun postMessage(
             @RequestParam("token") token: String,
             @RequestParam("channel") channel: String,
