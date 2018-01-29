@@ -17,10 +17,10 @@ spring:
     password: ${jdbcPassword:redacted}
     driver-class-name: org.postgresql.Driver
 
-slackBotToken: ${slackBotToken:redacted}
-omdbApiKey: ${omdbApiKey:redacted}
-tmdbApiKey: ${tmdbApiKey:redacted}
-wolframAlphaAppId: ${wolframAlphaAppId:redacted}
+slackBotToken: ${ApiSlack:redacted}
+omdbApiKey: ${ApiOmdb:redacted}
+tmdbApiKey: ${ApiTmdb:redacted}
+wolframAlphaAppId: ${ApiWolframalpha:redacted}
 logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 management:
   endpoints:
