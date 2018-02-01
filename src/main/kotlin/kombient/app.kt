@@ -27,7 +27,7 @@ class Application {
     @Bean
     fun logger(mapper: ObjectMapper): Logbook {
         return Logbook.builder()
-                .condition(Conditions.requestTo("/client/**"))
+                .condition(Conditions.requestTo("/api/**"))
                 .formatter(JsonHttpLogFormatter())
                 .build()
     }
