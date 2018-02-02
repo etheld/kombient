@@ -17,7 +17,7 @@ interface ImdbClient {
             val Year: Int,
             val Plot: String,
             val Ratings: Array<Rating>,
-            val imdbRating: Float,
+            val imdbRating: String,
             val imdbVotes: String,
             val Type: String,
             val Runtime: String,
