@@ -51,11 +51,11 @@ class SlackController(
 
                 val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbMovie)
 
-                val messageFormat = String.format("[IMDb] %s(%d) %.1f/10 from %d votes %s [%s] http://www.imdb.com/title/%s %s",
+                val messageFormat = String.format("[IMDb] %s(%d) %.1f/10 from %s votes %s [%s] http://www.imdb.com/title/%s %s",
                         imdbMovie.Title,
                         imdbMovie.Year,
                         imdbMovie.imdbRating,
-                        imdbMovie.imdbVotes.replace(",", "").toInt(),
+                        imdbMovie.imdbVotes.replace(",", ""),
                         imdbMovie.Runtime,
                         imdbMovie.Genre,
                         imdbMovie.imdbID,
