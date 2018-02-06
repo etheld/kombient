@@ -1,9 +1,10 @@
 rtmUrl: https://slack.com/api/rtm.start?token={token}&simple_latest&no_unreads
 logging.level.kotlin: DEBUG
 
+
 spring:
-  jpa:
-    properties:
+
+  jpa.properties:
       hibernate:
         show_sql: true
         use_sql_comments: true
@@ -11,6 +12,7 @@ spring:
         type: trace
         temp:
           use_jdbc_metadata_defaults: false
+
   datasource:
     url: ${jdbcUrl:redacted}
     username: ${jdbcUsername:redacted}

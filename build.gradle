@@ -154,7 +154,7 @@ dependencies {
 //    compile('org.springframework.cloud:spring-cloud-config-server')
 //    compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
 //    compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard')
-//    compile('org.springframework.cloud:spring-cloud-starter-vault-config')
+    compile('org.springframework.cloud:spring-cloud-starter-vault-config')
 //    compile('org.springframework.boot:spring-boot-starter-security')
 //    compile('org.springframework.boot:spring-boot-starter-web-services')
 //    runtime('mysql:mysql-connector-java')

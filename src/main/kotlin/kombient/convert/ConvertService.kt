@@ -18,12 +18,16 @@ class ConvertService {
             .target(kombient.convert.WolframAlphaClient::class.java, "https://api.wolframalpha.com")
 
     fun convert(input: String): String {
-        val wolframResult = client.convert(input, wolframAlphaAppId)
-        if (!wolframResult.queryresult.error) {
-            val inputPod = wolframResult.queryresult.pods.first({ it.title == "Input interpretation" || it.title == "Input" })
-            val resultPod = wolframResult.queryresult.pods.first({ it.title == "Result" })
-            return String.format("%s: %s", inputPod.subpods.first().plaintext, resultPod.subpods.first().plaintext)
+        try {
+            val wolframResult = client.convert(input, wolframAlphaAppId)
+            if (!wolframResult.queryresult.error) {
+                val inputPod = wolframResult.queryresult.pods.first({ it.title == "Input interpretation" || it.title == "Input" })
+                val resultPod = wolframResult.queryresult.pods.first({ it.title == "Result" })
+                return String.format("%s: %s", inputPod.subpods.first().plaintext, resultPod.subpods.first().plaintext)
+            }
+            return "Sorry, there was an error on the query"
+        } catch (e: Exception) {
+            return "Sorry there was a problem with the service"
         }
-        return "Sorry, there was an error on the query"
     }
 }

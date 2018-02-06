@@ -41,6 +41,7 @@ class SlackController(
                 val message = convertService.convert(input)
                 slackService.sendMessage(event.event.channel, message)
             }
+            
             if (imdbMatch != null) {
                 val (title) = imdbMatch.destructured
 
