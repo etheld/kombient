@@ -2,9 +2,11 @@ package kombient.movies.imdb
 
 import kombient.movies.repository.RatingsRepository
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
+@RefreshScope
 @Component
 class ImdbService(
         val imdbClient: ImdbClient,
