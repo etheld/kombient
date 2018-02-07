@@ -25,9 +25,8 @@ class ImdbService(
         if (findLastVotesForUser.isEmpty()) {
             return "Could not find any ratings for $user"
         }
-        return findLastVotesForUser
-                .joinToString(separator = ", ") { rating ->
-                    String.format("%s (%d)", rating.title.title, rating.vote)
-                }
+        return findLastVotesForUser.joinToString(separator = ", ") { rating ->
+            String.format("%s (%d)", rating.title.title, rating.vote)
+        }
     }
 }

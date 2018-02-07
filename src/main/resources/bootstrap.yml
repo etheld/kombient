@@ -1,5 +1,5 @@
 spring:
   application.name: kombient
   cloud.vault:
-      uri: ${vault_url:redacted}
-      token: ${vault_token:redacted}
+      uri: ${vaultUrl:redacted}
+      token: ${vaultToken:redacted}
