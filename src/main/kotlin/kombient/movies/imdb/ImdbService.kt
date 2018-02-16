@@ -1,6 +1,7 @@
 package kombient.movies.imdb
 
 import kombient.movies.repository.RatingsRepository
+import kombient.movies.tmdb.TmdbService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.data.domain.PageRequest
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class ImdbService(
         val imdbClient: ImdbClient,
+        val tmdbService: TmdbService,
         val ratingsRepository: RatingsRepository
 ) {
     @Value("\${omdbApiKey}")
@@ -29,4 +31,14 @@ class ImdbService(
             String.format("%s (%d)", rating.title.title, rating.vote)
         }
     }
+
+    fun getMovie(title: String): ImdbClient.ImdbMovie {
+
+        val searchResult = tmdbService.findMovie(title)
+        val (_, imdbId) = tmdbService.getMovieById(searchResult.results.first().id)
+
+        return getMovieById(imdbId)
+
+    }
+
 }

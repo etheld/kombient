@@ -14,8 +14,21 @@ interface TmdbClient {
             @RequestParam("api_key") apiKey: String
     ): TmdbSearchResult
 
+    @GetMapping("/3/search/tv?language=en-US&page=1&include_adult=false")
+    fun searchTVSeriesByTitle(
+            @RequestParam("query") title: String,
+            @RequestParam("api_key") apiKey: String
+    ): TmdbSearchResult
+
+
     @GetMapping("/3/movie/{id}")
     fun getMovieById(
+            @PathVariable("id") id: Int,
+            @RequestParam("api_key") apiKey: String
+    ): TmdbMovie
+
+    @GetMapping("/3/tv/{id}")
+    fun getTVById(
             @PathVariable("id") id: Int,
             @RequestParam("api_key") apiKey: String
     ): TmdbMovie

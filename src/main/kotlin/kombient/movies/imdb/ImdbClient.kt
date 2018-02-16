@@ -23,7 +23,18 @@ interface ImdbClient {
             val Runtime: String,
             val Genre: String,
             val imdbID: String
-    )
+    ) {
+        override fun toString(): String {
+            return String.format("[IMDb] %s(%d) %s/10 from %s votes %s [%s] http://www.imdb.com/title/%s",
+                    Title,
+                    Year,
+                    imdbRating,
+                    imdbVotes.replace(",", ""),
+                    Runtime,
+                    Genre,
+                    imdbID)
+        }
+    }
 
     data class Rating(val Source: String, val Value: String)
 }

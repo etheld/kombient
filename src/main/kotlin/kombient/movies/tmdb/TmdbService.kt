@@ -13,7 +13,25 @@ class TmdbService(val tmdbClient: TmdbClient) {
         return tmdbClient.searchMovieByTitle(title, apiKey)
     }
 
+//    fun findTVseries(title: String): TmdbClient.TmdbSearchResult {
+//        return tmdbClient.searchTVSeriesByTitle(title, apiKey)
+//    }
+
     fun getMovieById(id: Int): TmdbClient.TmdbMovie {
         return tmdbClient.getMovieById(id, apiKey)
     }
+
+//    fun getTV(id: Int): TmdbClient.TmdbSearchResult {
+//        return tmdbClient.getTVById(id, apiKey)
+//    }
+
+//    fun getImdbId(title: String): Int {
+//        val findMovie = findMovie(title)
+//
+//        if (findMovie.results.size == 0) {
+//            val findTVseries = findTVseries(title)
+//
+//        }
+//    }
+
 }
