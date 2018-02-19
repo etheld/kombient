@@ -28,13 +28,15 @@ class SlackController(
 
                     val commandMatch = botCommand.isMatched(message)
 
-                        LOGGER.info("{} is {}({})", botCommand, commandMatch, commandMatch != null)
+                    LOGGER.info("{} is {}({})", botCommand, commandMatch, commandMatch != null)
                     if (commandMatch != null) {
                         val response = botCommand.process(message)
                         LOGGER.info("Response is: {}", response)
-                        response
-                                .map { slackService.sendMessage(channel, it) }
-                                .orElse(slackService.sendMessage(channel, "Something just broke"))
+
+                        when {
+                            response.isPresent -> slackService.sendMessage(channel, response.get())
+                            else -> slackService.sendMessage(channel, "Empty response :(")
+                        }
 
                     }
                 } catch (e: Exception) {
