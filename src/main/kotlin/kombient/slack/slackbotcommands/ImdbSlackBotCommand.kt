@@ -7,17 +7,23 @@ import java.util.Optional
 
 @Component
 class ImdbSlackBotCommand(
-        val imdbService: ImdbService,
-        val movieUserRatingService: MovieUserRatingService
+        private val imdbService: ImdbService,
+        private val movieUserRatingService: MovieUserRatingService
 ) : SlackBotCommand {
+
+    private val commandRegex = Regex("!imdb (.+)")
+
+    override fun isMatched(message: String): MatchResult? {
+        return commandRegex.matchEntire(message)
+    }
 
     override fun process(message: String): Optional<String> {
 
-        val imdbMatch = Regex("!imdb (.+)").matchEntire(message)
-        if (imdbMatch != null) {
-            val (title) = imdbMatch.destructured
+        val match = isMatched(message)
+        if (match != null) {
+            val (title) = match.destructured
 
-            val imdbMovie = imdbService.getMovie(title)
+            val imdbMovie = imdbService.getMovieByTitle(title)
             val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbMovie)
 
             return Optional.of(String.format("%s %s", imdbMovie, ratingText))

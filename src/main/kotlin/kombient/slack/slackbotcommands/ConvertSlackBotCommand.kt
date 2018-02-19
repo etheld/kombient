@@ -6,14 +6,20 @@ import java.util.Optional
 
 @Component
 class ConvertSlackBotCommand(
-        val convertService: ConvertService
+        private val convertService: ConvertService
 ) : SlackBotCommand {
 
-    override fun process(message: String): Optional<String> {
-        val convertMatch = Regex("!convert (.+)").matchEntire(message)
+    private val commandMatchRegex = Regex("!convert (.+)")
 
-        if (convertMatch != null) {
-            val (input: String) = convertMatch.destructured
+    override fun isMatched(message: String): MatchResult? {
+        return commandMatchRegex.matchEntire(message)
+    }
+
+    override fun process(message: String): Optional<String> {
+        val match = isMatched(message)
+
+        if (match != null) {
+            val (input: String) = match.destructured
             return Optional.ofNullable(convertService.convert(input))
         }
 

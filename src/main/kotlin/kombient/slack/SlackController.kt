@@ -21,15 +21,23 @@ class SlackController(
     fun event(@RequestBody event: SlackEvent): String {
         executor.execute({
             for (botCommand in botCommands) {
+                val channel = event.event.channel
+                val message = event.event.text
+
                 try {
 
-                    val response = botCommand.process(event.event.text)
-                    response
-                            .map { slackService.sendMessage(event.event.channel, it) }
-                            .orElse(slackService.sendMessage(event.event.channel, "Something just broke"))
+                    val commandMatch = botCommand.isMatched(message)
+
+                    if (commandMatch != null) {
+                        val response = botCommand.process(message)
+                        response
+                                .map { slackService.sendMessage(channel, it) }
+                                .orElse(slackService.sendMessage(channel, "Something just broke"))
+
+                    }
                 } catch (e: Exception) {
                     LOGGER.error("Error found: ", e)
-                    slackService.sendMessage(event.event.channel, "Sorry there is a problem with this service")
+                    slackService.sendMessage(channel, "Sorry there is a problem with this service")
                 }
             }
         })

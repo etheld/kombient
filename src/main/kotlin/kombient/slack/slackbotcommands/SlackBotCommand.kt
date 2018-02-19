@@ -8,4 +8,5 @@ import java.util.Optional
  */
 interface SlackBotCommand {
     fun process(message: String): Optional<String>
+    fun isMatched(message: String): MatchResult?
 }

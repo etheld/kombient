@@ -32,7 +32,7 @@ class ImdbService(
         }
     }
 
-    fun getMovie(title: String): ImdbClient.ImdbMovie {
+    fun getMovieByTitle(title: String): ImdbClient.ImdbMovie {
 
         val searchResult = tmdbService.findMovie(title)
         val (_, imdbId) = tmdbService.getMovieById(searchResult.results.first().id)

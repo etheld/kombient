@@ -6,15 +6,21 @@ import java.util.Optional
 
 @Component
 class ImdbLastSlackBotCommand(
-        val imdbService: ImdbService
+        private val imdbService: ImdbService
 ) : SlackBotCommand {
+
+    private val commandRegex = Regex("!last(\\d+)? (.+)")
+
+    override fun isMatched(message: String): MatchResult? {
+        return commandRegex.matchEntire(message)
+    }
 
     override fun process(message: String): Optional<String> {
 
-        val imdbLastMatch = Regex("!last(\\d+)? (.+)").matchEntire(message)
+        val match = isMatched(message)
 
-        if (imdbLastMatch != null) {
-            val (num, title) = imdbLastMatch.destructured
+        if (match != null) {
+            val (num, title) = match.destructured
             return Optional.ofNullable(imdbService.getLastMovieRatingsForUser(num.toIntOrNull() ?: 10, title))
         }
         return Optional.empty()
