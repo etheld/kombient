@@ -29,6 +29,6 @@ class ImdbSlackBotCommand(
             return Optional.of(String.format("%s %s", imdbMovie, ratingText))
 
         }
-        return Optional.empty();
+        return Optional.empty()
     }
 }
