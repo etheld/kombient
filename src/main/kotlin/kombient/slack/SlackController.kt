@@ -15,7 +15,9 @@ class SlackController(
         val executor: TaskExecutor,
         val botCommands: List<SlackBotCommand>
 ) {
-    private val LOGGER = LoggerFactory.getLogger(SlackController::class.java)
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(SlackController::class.java)
+    }
 
     @RequestMapping("/api/events")
     fun event(@RequestBody event: SlackEvent): String {
@@ -25,7 +27,6 @@ class SlackController(
                 val message = event.event.text
 
                 try {
-
                     val commandMatch = botCommand.isMatched(message)
 
                     LOGGER.info("{} is {}({})", botCommand, commandMatch, commandMatch != null)

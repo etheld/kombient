@@ -9,4 +9,8 @@
     <appender-ref ref="CONSOLE"/>
   </root>
 
+  <root level="error">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
 </configuration>
