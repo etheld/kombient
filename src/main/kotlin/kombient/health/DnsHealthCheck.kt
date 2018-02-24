@@ -13,7 +13,7 @@ import java.net.InetAddress
  */
 @Component
 class DnsHealthCheck(
-        @Value("dns.health.hostnames") private val hostnames: List<String>
+        @Value("\${dns.health.hostnames}") private val hostnames: List<String>
 ) : HealthIndicator {
 
     companion object {
@@ -27,7 +27,7 @@ class DnsHealthCheck(
             }
             Health.up().build()
         } catch (e: Exception) {
-            LOGGER.error("Aw, dns resolution failed.", e)
+            LOGGER.error("Aw, dns resolution failed", e)
             Health.down().build()
         }
     }
