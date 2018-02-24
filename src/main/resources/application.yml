@@ -49,6 +49,4 @@ logging:
     org.hibernate.type.descriptor.sql: trace
     kombient: info
 
-dns.health.hostnames:
-  - google
-  - postgres
+dns.health.hostnames: google.com,postgres
