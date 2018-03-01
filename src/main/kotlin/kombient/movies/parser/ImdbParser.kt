@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.persistence.EntityManagerFactory
@@ -46,9 +47,6 @@ class ImdbParser(
 
             val movieBase = get.select("#ratings-container div.lister-item.mode-detail")
 
-            val em = entityManagerFactory.createEntityManager();
-            em.transaction.begin()
-
             val newRatings = ArrayList<Rating>()
 
             val userRatings = ratingsRepository.findAllByName(username)
@@ -69,18 +67,22 @@ class ImdbParser(
 
             }
 
-            newRatings.forEach { em.persist(it) }
-
-            val titles = newRatings.map { tmdbService.findMovieByImdbId(it.imdbId).movie_results.first().title + "(${it.vote})" }.joinToString(separator = ", ") { it }
+            saveMoviesInTheDatabase(newRatings, username)
 
 
-            if (newRatings.size > 0) {
-                slackService.sendMessage(imdbParserConfig.channel, "$username voted: $titles")
-            }
+        }
+    }
 
-            em.transaction.commit()
+    @Transactional
+    fun saveMoviesInTheDatabase(newRatings: ArrayList<Rating>, username: String) {
+        val entityManager = entityManagerFactory.createEntityManager()
 
+        newRatings.forEach { entityManager.persist(it) }
 
+        val titles = newRatings.map { tmdbService.findMovieByImdbId(it.imdbId).movie_results.first().title + "(${it.vote})" }.joinToString(separator = ", ") { it }
+        
+        if (newRatings.size > 0) {
+            slackService.sendMessage(imdbParserConfig.channel, "$username voted: $titles")
         }
     }
 
