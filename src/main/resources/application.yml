@@ -64,3 +64,8 @@ imdb:
     Bervi: ur24082448
     Rheya: ur18847773
     Name: ur26054226
+
+imdbparser:
+  frequency: 1200000
+  delay: 10000
+

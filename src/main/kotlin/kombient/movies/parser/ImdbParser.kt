@@ -34,7 +34,7 @@ class ImdbParser(
 ) {
     val MAX_BODY_SIZE_15M = 15_000_000
 
-    @Scheduled(fixedRate = 20 * 60 * 1000, initialDelay = 20 * 60 * 1000)
+    @Scheduled(fixedRateString = "\${imdbparser.frequency}", initialDelayString = "\${imdbparser.delay}")
     fun parseImdb() {
 
         imdbParserConfig.userconfig.forEach { (username, userid) ->
