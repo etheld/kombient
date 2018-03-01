@@ -35,7 +35,7 @@ class SlackController(
                         LOGGER.info("Response is: {}", response)
 
                         when {
-                            response.isPresent -> slackService.sendMessage(channel, response.get())
+                            response.isPresent -> slackService.sendMessage(channel, "@${event.event.user}: ${response.get()}")
                             else -> slackService.sendMessage(channel, "Empty response :(")
                         }
 

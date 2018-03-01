@@ -1,5 +1,6 @@
 package kombient.movies.tmdb
 
+import com.google.common.util.concurrent.RateLimiter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -9,7 +10,15 @@ class TmdbService(val tmdbClient: TmdbClient) {
     @Value("\${tmdbApiKey}")
     private lateinit var apiKey: String
 
+    val rateLimiter = RateLimiter.create(3.5)
+
+    fun findMovieByImdbId(id: String): TmdbClient.TmdbFindResult {
+        rateLimiter.acquire()
+        return tmdbClient.findByImdbId(id, apiKey)
+    }
+
     fun findMovie(title: String): TmdbClient.TmdbSearchResult {
+        rateLimiter.acquire()
         return tmdbClient.searchMovieByTitle(title, apiKey)
     }
 
@@ -18,6 +27,7 @@ class TmdbService(val tmdbClient: TmdbClient) {
 //    }
 
     fun getMovieById(id: Int): TmdbClient.TmdbMovie {
+        rateLimiter.acquire()
         return tmdbClient.getMovieById(id, apiKey)
     }
 

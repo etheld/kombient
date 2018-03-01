@@ -1,23 +1,31 @@
 package kombient.movies.imdb
 
+import feign.FeignException
+import feign.RetryableException
+import kombient.movies.repository.ImdbTitleRepository
 import kombient.movies.repository.RatingsRepository
 import kombient.movies.tmdb.TmdbService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.data.domain.PageRequest
+import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Component
+import java.net.SocketTimeoutException
 
 @RefreshScope
 @Component
 class ImdbService(
         val imdbClient: ImdbClient,
         val tmdbService: TmdbService,
-        val ratingsRepository: RatingsRepository
+        val ratingsRepository: RatingsRepository,
+        val titleRepository: ImdbTitleRepository
 ) {
     @Value("\${omdbApiKey}")
     private lateinit var apiKey: String
 
+    @Retryable(value = [FeignException::class, RetryableException::class, SocketTimeoutException::class], maxAttemptsExpression = "5")
     fun getMovieById(imdbId: String): ImdbClient.ImdbMovie {
+        println("Fetching $imdbId")
         return imdbClient.getMovieById(imdbId, apiKey)
     }
 
@@ -28,7 +36,7 @@ class ImdbService(
             return "Could not find any ratings for $user"
         }
         return findLastVotesForUser.joinToString(separator = ", ") { rating ->
-            String.format("%s (%d)", rating.title.title, rating.vote)
+            String.format("%s (%d)", titleRepository.findByImdbId(rating.imdbId).title, rating.vote)
         }
     }
 
