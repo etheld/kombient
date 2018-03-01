@@ -7,7 +7,6 @@ import kombient.slack.SlackService
 import org.jsoup.Jsoup
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -35,7 +34,7 @@ class ImdbParser(
 ) {
     val MAX_BODY_SIZE_15M = 15_000_000
 
-    @Scheduled(fixedRateString = "\${imdbparser.frequency}", initialDelayString = "\${imdbparser.delay}")
+    //    @Scheduled(fixedRateString = "\${imdbparser.frequency}", initialDelayString = "\${imdbparser.delay}")
     fun parseImdb() {
 
         imdbParserConfig.userconfig.forEach { (username, userid) ->
@@ -80,7 +79,7 @@ class ImdbParser(
         newRatings.forEach { entityManager.persist(it) }
 
         val titles = newRatings.map { tmdbService.findMovieByImdbId(it.imdbId).movie_results.first().title + "(${it.vote})" }.joinToString(separator = ", ") { it }
-        
+
         if (newRatings.size > 0) {
             slackService.sendMessage(imdbParserConfig.channel, "$username voted: $titles")
         }
