@@ -45,7 +45,7 @@ interface TmdbClient {
     )
 
     data class TmdbFindResult(
-            val movie_results: ArrayList<TmdbFindMovieResult> = ArrayList()
+            val movie_results: List<TmdbFindMovieResult> = ArrayList()
     )
 
     data class TmdbMovie(
@@ -54,15 +54,34 @@ interface TmdbClient {
             val popularity: Float,
             val overview: String,
             val title: String,
+            val runtime: Int,
+            val release_date: String,
+            val genres: List<Genre>,
             val vote_count: Int,
             val vote_average: Float
+    ) {
+        override fun toString(): String {
+            return String.format("[IMDb] %s(%s) %s/10 from %s votes %s mins [%s] http://www.imdb.com/title/%s",
+                    title,
+                    release_date,
+                    vote_average,
+                    vote_count,
+                    runtime,
+                    genres.joinToString(", ") { it.name },
+                    imdb_id)
+        }
+    }
+
+    data class Genre(
+            val id: Int,
+            val name: String
     )
 
     data class TmdbSearchResult(
             val page: Int,
             val total_results: Int,
             val total_pages: Int,
-            val results: Array<TmdbSearchSummary>
+            val results: List<TmdbSearchSummary>
     )
 
     data class TmdbSearchSummary(

@@ -40,8 +40,9 @@ class SlackController(
                         val response = botCommand.process(message)
                         LOGGER.info("Response is: {}", response)
 
+                        val user = slackService.getUser(event.event.user)
                         when {
-                            response.isPresent -> slackService.sendMessage(channel, "@${event.event.user}: ${response.get()}")
+                            response.isPresent -> slackService.sendMessage(channel, "@${user.user.name}: ${response.get()}")
                             else -> slackService.sendMessage(channel, "Empty response :(")
                         }
 

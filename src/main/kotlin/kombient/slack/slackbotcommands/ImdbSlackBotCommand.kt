@@ -1,13 +1,13 @@
 package kombient.slack.slackbotcommands
 
-import kombient.movies.imdb.ImdbService
 import kombient.movies.movieuserrating.MovieUserRatingService
+import kombient.movies.tmdb.TmdbService
 import org.springframework.stereotype.Component
 import java.util.Optional
 
 @Component
 class ImdbSlackBotCommand(
-        private val imdbService: ImdbService,
+        private val tmdbService: TmdbService,
         private val movieUserRatingService: MovieUserRatingService
 ) : SlackBotCommand {
 
@@ -23,10 +23,13 @@ class ImdbSlackBotCommand(
         if (match != null) {
             val (title) = match.destructured
 
-            val imdbMovie = imdbService.getMovieByTitle(title)
-            val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbMovie)
+            val firstSearchResult = tmdbService.findMovie(title).results.firstOrNull() ?: return Optional.of("Could not find a match for this title")
 
-            return Optional.of(String.format("%s %s", imdbMovie, ratingText))
+            val movie = tmdbService.getMovieById(firstSearchResult.id)
+
+            val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(movie.imdb_id)
+
+            return Optional.of(String.format("%s %s", movie, ratingText))
 
         }
         return Optional.empty()
