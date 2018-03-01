@@ -7,6 +7,7 @@ import org.springframework.core.task.TaskExecutor
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.annotation.PostConstruct
 
 
 @RestController
@@ -17,6 +18,11 @@ class SlackController(
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SlackController::class.java)
+    }
+
+    @PostConstruct
+    fun onInit() {
+        slackService.sendMessage("#gweli", "Bot starting up.")
     }
 
     @RequestMapping("/api/events")
