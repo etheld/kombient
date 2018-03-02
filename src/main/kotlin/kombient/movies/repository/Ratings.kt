@@ -42,6 +42,6 @@ interface RatingsRepository : JpaRepository<Rating, Long> {
     @Query("SELECT r FROM Rating r WHERE lower(r.name) = lower(:name) order by r.date desc")
     fun findLastVotesForUser(@Param("name") name: String, pageable: Pageable): List<Rating>
 
-    fun findAllByName(name: String): List<Rating>
+    fun findAllByNameAndImdbIdIn(name: String, imdbId: List<String>): List<Rating>
 
 }
