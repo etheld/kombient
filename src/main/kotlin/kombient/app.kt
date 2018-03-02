@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.retry.annotation.EnableRetry
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
+import org.springframework.transaction.annotation.EnableTransactionManagement
 import org.springframework.web.filter.CommonsRequestLoggingFilter
 import org.zalando.logbook.Conditions
 import org.zalando.logbook.JsonHttpLogFormatter
@@ -21,6 +22,7 @@ import org.zalando.logbook.Logbook
 @EnableFeignClients
 @EnableRetry
 @EnableScheduling
+@EnableTransactionManagement
 class Application {
 
     @Bean

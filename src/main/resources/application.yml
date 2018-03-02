@@ -48,6 +48,7 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
     kombient: info
+    org.springframework.transaction: trace
 
 dns.health.hostnames: google.com,postgres
 
