@@ -23,13 +23,18 @@ class ImdbSlackBotCommand(
         if (match != null) {
             val (title) = match.destructured
 
-            val firstSearchResult = tmdbService.findMovie(title).results.firstOrNull() ?: return Optional.of("Could not find a match for this title")
+            val findMulti = tmdbService.findMulti(title)
 
-            val movie = tmdbService.getMovieById(firstSearchResult.id)
+            if (findMulti.results.isNotEmpty()) {
+                val firstResult = findMulti.results.first()
 
-            val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(movie.imdb_id)
+                val imdbId = tmdbService.getImdbIdFromMultiResult(firstResult)
 
-            return Optional.of(String.format("%s %s", movie, ratingText))
+                val multiSearchResultDetails = String.format("%s https://imdb.com/title/%s", tmdbService.formatMulti(firstResult), imdbId)
+
+                val ratingText = movieUserRatingService.getUserRatingsForImdbMovie(imdbId)
+                return Optional.of(String.format("%s %s", multiSearchResultDetails, ratingText))
+            }
 
         }
         return Optional.empty()

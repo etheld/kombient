@@ -2,8 +2,6 @@ package kombient.movies.repository
 
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 import javax.persistence.Column
@@ -53,17 +51,11 @@ data class ImdbTitle(
 )
 
 @Repository
-interface ImdbTitleRepository : JpaRepository<ImdbTitle, Long> {
-    fun findByImdbId(imdb_id: String): ImdbTitle
-}
-
-@Repository
 interface RatingsRepository : JpaRepository<Rating, Long> {
 
     fun findByImdbId(imdb_id: String): List<Rating>
 
-    @Query("SELECT r FROM Rating r WHERE lower(r.name) = lower(:name) order by r.date desc")
-    fun findLastVotesForUser(@Param("name") name: String, pageable: Pageable): List<Rating>
+    fun findAllByNameIgnoreCaseOrderByDateDesc(name: String, pageable: Pageable): List<Rating>
 
     fun findAllByNameAndImdbIdIn(name: String, imdbId: List<String>): List<Rating>
 

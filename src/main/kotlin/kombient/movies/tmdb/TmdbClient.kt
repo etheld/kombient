@@ -1,5 +1,6 @@
 package kombient.movies.tmdb
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import org.springframework.cloud.netflix.feign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -8,11 +9,23 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(name = "tmdb", url = "https://api.themoviedb.org")
 interface TmdbClient {
 
+    @GetMapping("/3/tv/{id}/external_ids")
+    fun getImdbIdFromTvId(
+            @PathVariable("id") id: Int,
+            @RequestParam("api_key") apiKey: String
+    ): TmdbExternalIds
+
     @GetMapping("/3/find/{id}?external_source=imdb_id")
     fun findByImdbId(
             @RequestParam("id") id: String,
             @RequestParam("api_key") apiKey: String
     ): TmdbFindResult
+
+    @GetMapping("/3/search/multi")
+    fun findMulti(
+            @RequestParam("query") query: String,
+            @RequestParam("api_key") apiKey: String
+    ): TmdbMultiSearchResult
 
     @GetMapping("/3/search/movie?language=en-US&page=1&include_adult=false")
     fun searchMovieByTitle(
@@ -34,19 +47,76 @@ interface TmdbClient {
     ): TmdbMovie
 
     @GetMapping("/3/tv/{id}")
-    fun getTVById(
+    fun getTvById(
             @PathVariable("id") id: Int,
             @RequestParam("api_key") apiKey: String
-    ): TmdbMovie
+    ): TmdbTv
+
+    data class TmdbExternalIds(
+            val imdb_id: String
+    )
+
+    data class TmdbMultiSearchResult(
+            val page: Int,
+            val total_results: Int,
+            val total_pages: Int,
+            val results: List<TmdbMultiSearchSummary>
+    )
+
+    enum class MediaType {
+        TV, MOVIE;
+
+        companion object {
+            @JvmStatic
+            @JsonCreator
+            fun fromString(str: String): MediaType {
+                return MediaType.values().first { it.name.toLowerCase() == str.toLowerCase() }
+            }
+        }
+    }
+
+    data class TmdbMultiSearchSummary(
+            val id: Int = 0,
+            val media_type: MediaType = MediaType.MOVIE
+    )
 
     data class TmdbFindMovieResult(
             val id: Int = 0,
             val title: String = ""
     )
 
+    data class TmdbFindTVResult(
+            val id: Int = 0,
+            val name: String = ""
+    )
+
     data class TmdbFindResult(
+            val tv_results: List<TmdbFindTVResult> = ArrayList(),
             val movie_results: List<TmdbFindMovieResult> = ArrayList()
     )
+
+    data class TmdbTv(
+            val id: Int,
+            val popularity: Float,
+            val overview: String,
+            val name: String,
+            val runtime: Int,
+            val first_air_date: String,
+            val genres: List<Genre>,
+            val vote_count: Int,
+            val vote_average: Float
+    ) {
+        override fun toString(): String {
+            return String.format("[IMDb]TV %s(%s) %s/10 from %s votes %s mins [%s]",
+                    name,
+                    first_air_date,
+                    vote_average,
+                    vote_count,
+                    runtime,
+                    genres.joinToString(", ") { it.name })
+        }
+    }
+
 
     data class TmdbMovie(
             val id: Int,
@@ -61,14 +131,13 @@ interface TmdbClient {
             val vote_average: Float
     ) {
         override fun toString(): String {
-            return String.format("[IMDb] %s(%s) %s/10 from %s votes %s mins [%s] http://www.imdb.com/title/%s",
+            return String.format("[IMDb] %s(%s) %s/10 from %s votes %s mins [%s]",
                     title,
                     release_date,
                     vote_average,
                     vote_count,
                     runtime,
-                    genres.joinToString(", ") { it.name },
-                    imdb_id)
+                    genres.joinToString(", ") { it.name })
         }
     }
 

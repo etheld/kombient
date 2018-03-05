@@ -1,6 +1,7 @@
 package kombient
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import feign.Logger
 import kombient.movies.parser.ImdbParserConfig
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -40,6 +41,11 @@ class Application {
                 .condition(Conditions.requestTo("/api/**"))
                 .formatter(JsonHttpLogFormatter())
                 .build()
+    }
+
+    @Bean
+    fun feignLoggerLevel(): Logger.Level {
+        return Logger.Level.FULL
     }
 
     @Bean

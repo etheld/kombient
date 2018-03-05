@@ -25,12 +25,6 @@ class ImdbParserConfig {
     }
 }
 
-data class ImdbParseMovieVote(
-        val imdbId: String,
-        val vote: String,
-        val date: LocalDate,
-        val username: String)
-
 @Component
 @Transactional
 class ImdbParser(
@@ -50,27 +44,23 @@ class ImdbParser(
 
         imdbParserConfig.userconfig.forEach { (username, userId) ->
             val imdbIds = getLatestMovieVotes(userId, username).map { it.imdbId }.toList()
+
             val existingRatings = ratingsRepository.findAllByNameAndImdbIdIn(username, imdbIds)
 
-            val newRatings = getLatestMovieVotes(userId, username).filter { movie -> !existingRatings.contains(movie) }
+            val newRatings = getLatestMovieVotes(userId, username).filter { movie ->
+                !existingRatings.contains(movie)
+            }
 
-            val molcsaRating = newRatings.filter { newRating ->
+            val molcsaRatings = newRatings.filter { newRating ->
                 existingRatings.any { existingRating -> newRating.imdbId == existingRating.imdbId && newRating.name == existingRating.name }
             }
-            val nonMolcsaRatings = newRatings.filter { !molcsaRating.contains(it) }
 
-            notifySlackWithMolcsaRatings(molcsaRating)
+            val nonMolcsaRatings = newRatings.filter {
+                !molcsaRatings.contains(it)
+            }
 
             LOGGER.info("New ratings: $nonMolcsaRatings")
-            saveMoviesInTheDatabase(nonMolcsaRatings, username)
-
-        }
-    }
-
-    private fun notifySlackWithMolcsaRatings(molcsaRating: List<Rating>) {
-        molcsaRating.forEach {
-            val movie = tmdbService.findMovieByImdbId(it.imdbId).movie_results.first()
-            slackService.sendMessage(imdbParserConfig.channel, "${it.name} molcsavoted: ${movie.title}(${it.vote})")
+            saveMoviesInTheDatabase(nonMolcsaRatings, molcsaRatings, username)
 
         }
     }
@@ -94,14 +84,22 @@ class ImdbParser(
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun saveMoviesInTheDatabase(newRatings: List<Rating>, username: String) {
-        newRatings
+    fun saveMoviesInTheDatabase(nonMolcsaRatings: List<Rating>, molcsaRatings: List<Rating>, username: String) {
+        nonMolcsaRatings
+                .plus(molcsaRatings)
                 .forEach { ratingsRepository.save(it) }
 
-        if (newRatings.isNotEmpty()) {
-            val titles = newRatings.map { tmdbService.findMovieByImdbId(it.imdbId).movie_results.first().title + "(${it.vote})" }.joinToString(separator = ", ") { it }
-            slackService.sendMessage(imdbParserConfig.channel, "$username voted: $titles")
+        if (molcsaRatings.isNotEmpty()) {
+            notifySlackWithRatings(molcsaRatings, username, "molcsa")
         }
+        if (nonMolcsaRatings.isNotEmpty()) {
+            notifySlackWithRatings(nonMolcsaRatings, username, "")
+        }
+    }
+
+    private fun notifySlackWithRatings(molcsaRatings: List<Rating>, username: String, prefix: String) {
+        val titles = molcsaRatings.map { tmdbService.getTitleByImdbId(it.imdbId) + "(${it.vote})" }.joinToString(separator = ", ") { it }
+        slackService.sendMessage(imdbParserConfig.channel, "$username ${prefix}voted: $titles")
     }
 
 }

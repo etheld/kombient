@@ -47,8 +47,9 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
-    kombient: info
+    kombient: DEBUG
     org.springframework.transaction: trace
+    kombient.movies.tmdb.TmdbClient: DEBUG
 
 dns.health.hostnames: google.com,postgres
 
