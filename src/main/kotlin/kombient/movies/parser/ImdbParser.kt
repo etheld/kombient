@@ -23,15 +23,13 @@ class ImdbParserConfig {
     override fun toString(): String {
         return "ImdbParserConfig(channel='$channel', userconfig=$userconfig)"
     }
-
 }
 
 data class ImdbParseMovieVote(
         val imdbId: String,
         val vote: String,
         val date: LocalDate,
-        val username: String
-)
+        val username: String)
 
 @Component
 @Transactional
@@ -39,50 +37,65 @@ class ImdbParser(
         @Autowired private val imdbParserConfig: ImdbParserConfig,
         @Autowired private val ratingsRepository: RatingsRepository,
         @Autowired private val tmdbService: TmdbService,
-        @Autowired private val slackService: SlackService
-) {
+        @Autowired private val slackService: SlackService) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ImdbParser::class.java)
+        const val MAX_BODY_SIZE_15M = 15_000_000
     }
 
-    val MAX_BODY_SIZE_15M = 15_000_000
 
     @Scheduled(fixedRateString = "\${imdbparser.frequency}", initialDelayString = "\${imdbparser.delay}")
     fun parseImdb() {
 
-        imdbParserConfig.userconfig.forEach { (username, userid) ->
-            val get = Jsoup
-                    .connect("http://www.imdb.com/user/$userid/ratings?ref_=nv_usr_rt_4")
-                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
-                    .maxBodySize(MAX_BODY_SIZE_15M)
-                    .get()
+        imdbParserConfig.userconfig.forEach { (username, userId) ->
+            val imdbIds = getLatestMovieVotes(userId, username).map { it.imdbId }.toList()
+            val existingRatings = ratingsRepository.findAllByNameAndImdbIdIn(username, imdbIds)
 
-            val movieBase = get.select("#ratings-container div.lister-item.mode-detail")
+            val newRatings = getLatestMovieVotes(userId, username).filter { movie -> !existingRatings.contains(movie) }
 
-
-            val parsedMovies = movieBase.map {
-                val imdbId = it.select("div.lister-item-image").first().attr("data-tconst")
-                val vote = it.select("div.lister-item-content div.ipl-rating-widget div.ipl-rating-star--other-user span.ipl-rating-star__rating").first().text()
-                val date = it.select("div.lister-item-content div.ipl-rating-widget + p").first().text().removePrefix("Rated on ")
-                val zonedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd MMM uuuu"))
-                ImdbParseMovieVote(imdbId, vote, zonedDate, username)
+            val molcsaRating = newRatings.filter { newRating ->
+                existingRatings.any { existingRating -> newRating.imdbId == existingRating.imdbId && newRating.name == existingRating.name }
             }
+            val nonMolcsaRatings = newRatings.filter { !molcsaRating.contains(it) }
 
-            val userRatings = ratingsRepository.findAllByNameAndImdbIdIn(username, parsedMovies.map { it.imdbId }.toList())
+            notifySlackWithMolcsaRatings(molcsaRating)
 
-            val newRatings = parsedMovies.filter { movie -> userRatings.none { it.date == movie.date && it.imdbId == movie.imdbId && it.name == movie.username && it.vote == movie.vote.toInt() } }
-
-            LOGGER.info("New ratings: $newRatings")
-            saveMoviesInTheDatabase(newRatings, username)
+            LOGGER.info("New ratings: $nonMolcsaRatings")
+            saveMoviesInTheDatabase(nonMolcsaRatings, username)
 
         }
     }
 
+    private fun notifySlackWithMolcsaRatings(molcsaRating: List<Rating>) {
+        molcsaRating.forEach {
+            val movie = tmdbService.findMovieByImdbId(it.imdbId).movie_results.first()
+            slackService.sendMessage(imdbParserConfig.channel, "${it.name} molcsavoted: ${movie.title}(${it.vote})")
+
+        }
+    }
+
+    private fun getLatestMovieVotes(userid: String, username: String): List<Rating> {
+        val get = Jsoup
+                .connect("http://www.imdb.com/user/$userid/ratings?ref_=nv_usr_rt_4")
+                .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
+                .maxBodySize(MAX_BODY_SIZE_15M)
+                .get()
+
+        val movieBase = get.select("#ratings-container div.lister-item.mode-detail")
+
+        return movieBase.map {
+            val imdbId = it.select("div.lister-item-image").first().attr("data-tconst")
+            val vote = it.select("div.lister-item-content div.ipl-rating-widget div.ipl-rating-star--other-user span.ipl-rating-star__rating").first().text()
+            val date = it.select("div.lister-item-content div.ipl-rating-widget + p").first().text().removePrefix("Rated on ")
+            val zonedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd MMM uuuu"))
+            Rating(imdbId = imdbId, vote = vote.toInt(), date = zonedDate, name = username)
+        }
+    }
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun saveMoviesInTheDatabase(newRatings: List<ImdbParseMovieVote>, username: String) {
+    fun saveMoviesInTheDatabase(newRatings: List<Rating>, username: String) {
         newRatings
-                .map { Rating(name = it.username, imdbId = it.imdbId, vote = it.vote.toInt(), date = it.date) }
                 .forEach { ratingsRepository.save(it) }
 
         if (newRatings.isNotEmpty()) {
