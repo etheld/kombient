@@ -64,7 +64,7 @@ interface TmdbClient {
     )
 
     enum class MediaType {
-        TV, MOVIE;
+        TV, MOVIE, PERSON;
 
         companion object {
             @JvmStatic
