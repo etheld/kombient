@@ -19,10 +19,6 @@ spring:
     password: ${jdbcPassword:redacted}
     driver-class-name: org.postgresql.Driver
 
-slackBotToken: ${ApiSlack:redacted}
-omdbApiKey: ${ApiOmdb:redacted}
-tmdbApiKey: ${ApiTmdb:redacted}
-wolframAlphaAppId: ${ApiWolframalpha:redacted}
 logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 management:
   endpoints:

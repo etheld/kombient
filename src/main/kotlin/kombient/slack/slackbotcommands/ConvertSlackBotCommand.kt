@@ -9,10 +9,10 @@ class ConvertSlackBotCommand(
         private val convertService: ConvertService
 ) : SlackBotCommand {
 
-    private val commandMatchRegex = Regex("!convert (.+)")
+    private val commandRegex = Regex("!convert (.+)")
 
     override fun isMatched(message: String): MatchResult? {
-        return commandMatchRegex.matchEntire(message)
+        return commandRegex.matchEntire(message)
     }
 
     override fun process(message: String): Optional<String> {
