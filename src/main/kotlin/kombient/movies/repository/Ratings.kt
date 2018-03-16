@@ -18,8 +18,7 @@ data class Rating(
         val name: String = "",
         @Column(name = "imdb_id", nullable = false) val imdbId: String = "",
         val vote: Int = 0,
-        val date: LocalDate = LocalDate.now(),
-        val created: LocalDate = LocalDate.now()
+        val date: LocalDate = LocalDate.now()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,19 +43,12 @@ data class Rating(
     }
 }
 
-@Entity
-@Table(name = "imdb_titles")
-data class ImdbTitle(
-        @Id @Column(name = "imdb_id") val imdbId: String = "",
-        val title: String = ""
-)
-
 @Repository
 interface RatingsRepository : JpaRepository<Rating, Long> {
 
     fun findByImdbId(imdb_id: String): List<Rating>
 
-    fun findAllByNameIgnoreCaseOrderByCreatedDesc(name: String, pageable: Pageable): List<Rating>
+    fun findAllByNameIgnoreCaseOrderByDateDesc(name: String, pageable: Pageable): List<Rating>
 
     fun findAllByNameAndImdbIdIn(name: String, imdbId: List<String>): List<Rating>
 
