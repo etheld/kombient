@@ -55,7 +55,7 @@ interface RatingsRepository : JpaRepository<Rating, Long> {
 
     fun findByImdbId(imdb_id: String): List<Rating>
 
-    fun findAllByNameIgnoreCaseOrderByDateDesc(name: String, pageable: Pageable): List<Rating>
+    fun findAllByNameIgnoreCaseOrderByCreatedDesc(name: String, pageable: Pageable): List<Rating>
 
     fun findAllByNameAndImdbIdIn(name: String, imdbId: List<String>): List<Rating>
 
