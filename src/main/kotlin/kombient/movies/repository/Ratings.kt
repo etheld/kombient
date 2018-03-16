@@ -18,7 +18,8 @@ data class Rating(
         val name: String = "",
         @Column(name = "imdb_id", nullable = false) val imdbId: String = "",
         val vote: Int = 0,
-        val date: LocalDate = LocalDate.now()
+        val date: LocalDate = LocalDate.now(),
+        val created: LocalDate = LocalDate.now()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -30,6 +31,7 @@ data class Rating(
         if (imdbId != other.imdbId) return false
         if (vote != other.vote) return false
         if (date != other.date) return false
+        if (created != other.created) return false
 
         return true
     }
