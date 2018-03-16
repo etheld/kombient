@@ -31,7 +31,6 @@ data class Rating(
         if (imdbId != other.imdbId) return false
         if (vote != other.vote) return false
         if (date != other.date) return false
-        if (created != other.created) return false
 
         return true
     }
