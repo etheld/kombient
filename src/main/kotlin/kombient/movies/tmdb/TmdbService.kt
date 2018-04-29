@@ -72,11 +72,10 @@ class TmdbService(val tmdbClient: TmdbClient) {
 
     fun getTitleByImdbId(id: String): String {
         val results = findMovieByImdbId(id)
-        return if (results.movie_results.isEmpty()) {
-            results.tv_results.first().name
-        } else {
-            results.movie_results.first().title
+        return when {
+            !results.movie_results.isEmpty() -> results.movie_results.first().title
+            !results.tv_results.isEmpty() -> results.tv_results.first().name
+            else -> "unknown"
         }
     }
-
 }
