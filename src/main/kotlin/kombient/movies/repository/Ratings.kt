@@ -15,11 +15,11 @@ import javax.persistence.Table
 @Entity
 @Table(name = "imdb_ratings")
 data class Rating(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
-        val name: String = "",
-        @Column(name = "imdb_id", nullable = false) val imdbId: String = "",
-        val vote: Int = 0,
-        val date: LocalDate = LocalDate.now()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
+    val name: String = "",
+    @Column(name = "imdb_id", nullable = false) val imdbId: String = "",
+    val vote: Int = 0,
+    val date: LocalDate = LocalDate.now()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -55,5 +55,4 @@ interface RatingsRepository : JpaRepository<Rating, Long> {
 
     @Query("select r.name as name,count(r.vote) as votes from Rating r group by r.name order by votes desc")
     fun findTopXRaters(pageable: Pageable): List<Map<String, String>>
-
 }

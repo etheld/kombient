@@ -1,7 +1,7 @@
 package kombient.slack
 
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.cloud.netflix.feign.FeignClient
+import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,29 +17,30 @@ interface SlackClient {
 
     @PostMapping("/api/chat.postMessage")
     fun postMessage(
-            @RequestParam("token") token: String,
-            @RequestParam("channel") channel: String,
-            @RequestParam("text") text: String)
+        @RequestParam("token") token: String,
+        @RequestParam("channel") channel: String,
+        @RequestParam("text") text: String
+    )
 
     @GetMapping("/api/users.info")
     fun getUser(
-            @RequestParam("token") token: String,
-            @RequestParam("user") user: String): SlackUserResponse
-
+        @RequestParam("token") token: String,
+        @RequestParam("user") user: String
+    ): SlackUserResponse
 }
 
 data class SlackUserResponse(
-        val ok: Boolean = false,
-        val user: UserInfo = UserInfo()
+    val ok: Boolean = false,
+    val user: UserInfo = UserInfo()
 )
 
 data class UserInfo(
-        val name: String = ""
+    val name: String = ""
 )
 
 @Component
 class SlackService(
-        val client: SlackClient
+    val client: SlackClient
 ) {
 
     @Value("\${slackBotToken}")
@@ -52,5 +53,4 @@ class SlackService(
     fun getUser(username: String): SlackUserResponse {
         return client.getUser(slackToken, username)
     }
-
 }

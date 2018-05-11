@@ -13,9 +13,9 @@ class ConvertService {
     private lateinit var wolframAlphaAppId: String
 
     private val client = Feign.builder()
-            .decoder(GsonDecoder())
-            .logLevel(Logger.Level.FULL)
-            .target(kombient.convert.WolframAlphaClient::class.java, "https://api.wolframalpha.com")
+        .decoder(GsonDecoder())
+        .logLevel(Logger.Level.FULL)
+        .target(kombient.convert.WolframAlphaClient::class.java, "https://api.wolframalpha.com")
 
     fun convert(input: String): String {
         try {

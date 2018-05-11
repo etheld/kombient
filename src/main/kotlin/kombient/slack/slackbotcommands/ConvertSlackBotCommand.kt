@@ -6,7 +6,7 @@ import java.util.Optional
 
 @Component
 class ConvertSlackBotCommand(
-        private val convertService: ConvertService
+    private val convertService: ConvertService
 ) : SlackBotCommand {
 
     private val commandRegex = Regex("!convert (.+)")
@@ -25,5 +25,4 @@ class ConvertSlackBotCommand(
 
         return Optional.empty()
     }
-
 }

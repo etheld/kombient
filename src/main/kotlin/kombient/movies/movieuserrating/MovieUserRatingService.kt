@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class MovieUserRatingService(
-        val ratingRepository: RatingsRepository
+    val ratingRepository: RatingsRepository
 ) {
 
     fun getUserRatingsForImdbMovie(imdbId: String): String {
@@ -18,5 +18,4 @@ class MovieUserRatingService(
     fun getImdbTopX(topX: Int): List<Map<String, String>> {
         return ratingRepository.findTopXRaters(PageRequest.of(0, topX))
     }
-
 }

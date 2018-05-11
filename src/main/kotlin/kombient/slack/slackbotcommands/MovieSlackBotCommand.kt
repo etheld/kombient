@@ -10,7 +10,7 @@ import java.util.Optional
  */
 @Component
 class MovieSlackBotCommand(
-        private val imdbService: ImdbService
+    private val imdbService: ImdbService
 ) : SlackBotCommand {
 
     private val commandRegex = Regex("!movie (.+)")
@@ -30,5 +30,4 @@ class MovieSlackBotCommand(
         }
         return Optional.empty()
     }
-
 }

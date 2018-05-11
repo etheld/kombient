@@ -6,7 +6,7 @@ import java.util.Optional
 
 @Component
 class ImdbLastSlackBotCommand(
-        private val imdbService: ImdbService
+    private val imdbService: ImdbService
 ) : SlackBotCommand {
 
     private val commandRegex = Regex("!last(\\d+)? (.+)")
@@ -25,5 +25,4 @@ class ImdbLastSlackBotCommand(
         }
         return Optional.empty()
     }
-
 }

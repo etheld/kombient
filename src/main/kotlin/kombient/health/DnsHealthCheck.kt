@@ -1,7 +1,6 @@
 package kombient.health
 
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.HealthIndicator
@@ -14,7 +13,7 @@ import java.net.InetAddress
  */
 @Component
 class DnsHealthCheck(
-        @Value("#{'\${dns.health.hostnames}'.split(',')}") private val hostnames: List<String>
+    @Value("#{'\${dns.health.hostnames}'.split(',')}") private val hostnames: List<String>
 ) : HealthIndicator {
 
     companion object {
@@ -32,5 +31,4 @@ class DnsHealthCheck(
             Health.down().build()
         }
     }
-
 }

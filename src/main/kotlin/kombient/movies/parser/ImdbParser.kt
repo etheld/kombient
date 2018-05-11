@@ -28,16 +28,16 @@ class ImdbParserConfig {
 @Component
 @Transactional
 class ImdbParser(
-        @Autowired private val imdbParserConfig: ImdbParserConfig,
-        @Autowired private val ratingsRepository: RatingsRepository,
-        @Autowired private val tmdbService: TmdbService,
-        @Autowired private val slackService: SlackService) {
+    @Autowired private val imdbParserConfig: ImdbParserConfig,
+    @Autowired private val ratingsRepository: RatingsRepository,
+    @Autowired private val tmdbService: TmdbService,
+    @Autowired private val slackService: SlackService
+) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ImdbParser::class.java)
         const val MAX_BODY_SIZE_15M = 15_000_000
     }
-
 
     @Scheduled(fixedRateString = "\${imdbparser.frequency}", initialDelayString = "\${imdbparser.delay}")
     fun parseImdb() {
@@ -61,16 +61,15 @@ class ImdbParser(
 
             LOGGER.info("New ratings: $nonMolcsaRatings")
             saveMoviesInTheDatabase(nonMolcsaRatings, molcsaRatings, username)
-
         }
     }
 
     private fun getLatestMovieVotes(userid: String, username: String): List<Rating> {
         val get = Jsoup
-                .connect("http://www.imdb.com/user/$userid/ratings?ref_=nv_usr_rt_4")
-                .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
-                .maxBodySize(MAX_BODY_SIZE_15M)
-                .get()
+            .connect("http://www.imdb.com/user/$userid/ratings?ref_=nv_usr_rt_4")
+            .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
+            .maxBodySize(MAX_BODY_SIZE_15M)
+            .get()
 
         val movieBase = get.select("#ratings-container div.lister-item.mode-detail")
 
@@ -86,8 +85,8 @@ class ImdbParser(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun saveMoviesInTheDatabase(nonMolcsaRatings: List<Rating>, molcsaRatings: List<Rating>, username: String) {
         nonMolcsaRatings
-                .plus(molcsaRatings)
-                .forEach { ratingsRepository.save(it) }
+            .plus(molcsaRatings)
+            .forEach { ratingsRepository.save(it) }
 
         if (molcsaRatings.isNotEmpty()) {
             notifySlackWithRatings(molcsaRatings, username, "molcsa")
@@ -101,5 +100,4 @@ class ImdbParser(
         val titles = molcsaRatings.map { tmdbService.getTitleByImdbId(it.imdbId) + "(${it.vote})" }.joinToString(separator = ", ") { it }
         slackService.sendMessage(imdbParserConfig.channel, "$username ${prefix}voted: $titles")
     }
-
 }

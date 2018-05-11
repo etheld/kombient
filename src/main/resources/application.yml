@@ -23,16 +23,17 @@ logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 management:
   endpoints:
     web:
-      expose:
-        - info
-        - health
+      exposure:
+        include:
+          - info
+          - health
   endpoint:
     health:
-      show-details: true
+      show-details: always
   health:
-    defaults: true
-    enabled: true
-    show-details: true
+    defaults:
+      enabled:
+      show-details: always
 
 feign:
   client:
@@ -50,6 +51,7 @@ logging:
 dns.health.hostnames: google.com,postgres
 
 imdb:
+  similarityscore: 0.85
   channel: '#secrettchannel'
   userconfig:
     Gweli: ur24140816

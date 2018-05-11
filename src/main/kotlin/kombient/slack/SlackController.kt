@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.annotation.PostConstruct
 
-
 @RestController
 class SlackController(
-        val slackService: SlackService,
-        val executor: TaskExecutor,
-        val botCommands: List<SlackBotCommand>
+    val slackService: SlackService,
+    val executor: TaskExecutor,
+    val botCommands: List<SlackBotCommand>
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SlackController::class.java)
@@ -45,7 +44,6 @@ class SlackController(
                             response.isPresent -> slackService.sendMessage(channel, "@${user.user.name}: ${response.get()}")
                             else -> slackService.sendMessage(channel, "Empty response :(")
                         }
-
                     }
                 } catch (e: Exception) {
                     LOGGER.error("Error found: ", e)

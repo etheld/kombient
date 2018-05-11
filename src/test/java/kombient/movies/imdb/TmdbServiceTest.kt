@@ -3,21 +3,23 @@ package kombient.movies.imdb
 import kombient.Application
 import kombient.movies.tmdb.TmdbService
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-
 @SpringBootTest(classes = [Application::class])
+@ActiveProfiles("dev")
 @ExtendWith(SpringExtension::class)
 internal class TmdbServiceTest {
-
 
     @Autowired
     private lateinit var tmdbService: TmdbService
 
+    @Disabled("rethink it")
     @Test
     fun shouldFindFightClub() {
         val findMovie = tmdbService.findMovie("fight club")
@@ -26,6 +28,7 @@ internal class TmdbServiceTest {
         assertThat(results).extracting("id").contains(550)
     }
 
+    @Disabled("rethink it")
     @Test
     fun shouldFindFightClubImdbId() {
         val findMovie = tmdbService.findMovie("fight club")
@@ -33,8 +36,5 @@ internal class TmdbServiceTest {
         val movie = tmdbService.getMovieById(id)
 
         assertThat(movie.imdb_id).isEqualToIgnoringCase("tt0137523")
-
-
     }
-
 }

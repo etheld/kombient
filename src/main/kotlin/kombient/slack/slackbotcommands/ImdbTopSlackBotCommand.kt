@@ -6,7 +6,7 @@ import java.util.Optional
 
 @Component
 class ImdbTopSlackBotCommand(
-        private val userRatingService: MovieUserRatingService
+    private val userRatingService: MovieUserRatingService
 ) : SlackBotCommand {
     private val commandRegex = Regex("!imdbtop(\\d+)")
 
@@ -20,11 +20,10 @@ class ImdbTopSlackBotCommand(
             val (topX) = match.destructured
             val imdbTopX = userRatingService.getImdbTopX(topX.toIntOrNull() ?: 10)
             val joinToString = imdbTopX
-                    .sortedBy { it["values"] }
-                    .joinToString(separator = ", ", transform = { "${it["name"]}(${it["votes"].toString()})" })
+                .sortedBy { it["values"] }
+                .joinToString(separator = ", ", transform = { "${it["name"]}(${it["votes"]})" })
             return Optional.of(joinToString)
         }
         return Optional.empty()
     }
-
 }

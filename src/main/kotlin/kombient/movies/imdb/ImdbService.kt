@@ -14,9 +14,9 @@ import java.net.SocketTimeoutException
 @RefreshScope
 @Component
 class ImdbService(
-        val imdbClient: ImdbClient,
-        val tmdbService: TmdbService,
-        val ratingsRepository: RatingsRepository
+    val imdbClient: ImdbClient,
+    val tmdbService: TmdbService,
+    val ratingsRepository: RatingsRepository
 ) {
     @Value("\${omdbApiKey}")
     private lateinit var apiKey: String
@@ -44,7 +44,5 @@ class ImdbService(
         val (_, imdbId) = tmdbService.getMovieById(searchResult.results.first().id)
 
         return getMovieById(imdbId)
-
     }
-
 }
