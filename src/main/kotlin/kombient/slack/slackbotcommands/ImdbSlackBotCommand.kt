@@ -14,7 +14,8 @@ class ImdbSlackBotCommand(
     @Value("\${imdb.similarityscore}") private val imdbSimilarityScore: Double
 ) : SlackBotCommand {
 
-    private val commandRegex = Regex("!imdb (.+)")
+    private val command = "!imdb"
+    private val commandRegex = Regex("$command (.+)")
 
     override fun isMatched(message: String): MatchResult? {
         return commandRegex.matchEntire(message)
@@ -43,6 +44,6 @@ class ImdbSlackBotCommand(
                 )
             }
         }
-        return Optional.of("Could not find it, maybe you misspelled it or it is a tv series? Try !tv")
+        return Optional.of("Could not find it, maybe you misspelled it or it is a tv series? Try ${ImdbTvSlackBotCommand.command}")
     }
 }

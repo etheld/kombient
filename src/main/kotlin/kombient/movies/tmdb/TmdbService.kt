@@ -1,13 +1,10 @@
 package kombient.movies.tmdb
 
 import com.google.common.util.concurrent.RateLimiter
-import kombient.movies.tmdb.TmdbClient.MediaType.MOVIE
-import kombient.movies.tmdb.TmdbClient.MediaType.TV
 import kombient.movies.tmdb.TmdbClient.TmdbExternalIds
 import kombient.movies.tmdb.TmdbClient.TmdbFindResult
+import kombient.movies.tmdb.TmdbClient.TmdbMovieSearchResult
 import kombient.movies.tmdb.TmdbClient.TmdbMultiSearchResult
-import kombient.movies.tmdb.TmdbClient.TmdbMultiSearchSummary
-import kombient.movies.tmdb.TmdbClient.TmdbSearchResult
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -29,9 +26,9 @@ class TmdbService(val tmdbClient: TmdbClient) {
         return tmdbClient.findMulti(title, apiKey)
     }
 
-    fun findMovie(title: String): TmdbSearchResult {
+    fun findMovie(title: String): TmdbMovieSearchResult {
         rateLimiter.acquire()
-        return tmdbClient.searchMovieByTitle(title, apiKey)
+        return tmdbClient.findMovieByTitle(title, apiKey)
     }
 
     fun getMovieById(id: Int): TmdbClient.TmdbMovie {
@@ -49,27 +46,6 @@ class TmdbService(val tmdbClient: TmdbClient) {
         return tmdbClient.getImdbIdFromTvId(id, apiKey)
     }
 
-    fun formatMulti(multiSearchResult: TmdbMultiSearchSummary): String {
-        return when {
-            multiSearchResult.media_type == TV -> getTvById(multiSearchResult.id).toString()
-            multiSearchResult.media_type == MOVIE -> getMovieById(multiSearchResult.id).toString()
-            else -> ""
-        }
-    }
-
-    fun getImdbIdFromMultiResult(searchResult: TmdbMultiSearchSummary): String {
-        return when {
-            searchResult.media_type == MOVIE -> {
-                getMovieById(searchResult.id).imdb_id
-            }
-            searchResult.media_type == TV -> {
-                val tvId = getTvById(searchResult.id).id
-                getImdbIdByTvId(tvId).imdb_id
-            }
-            else -> throw IllegalStateException("mediatype is not tv or movie")
-        }
-    }
-
     fun getTitleByImdbId(id: String): String {
         val results = findMovieByImdbId(id)
         return when {
@@ -77,5 +53,9 @@ class TmdbService(val tmdbClient: TmdbClient) {
             !results.tv_results.isEmpty() -> results.tv_results.first().name
             else -> "unknown"
         }
+    }
+
+    fun findTV(title: String): TmdbClient.TmdbTVSearchResult {
+        return tmdbClient.findTVByTitle(title, apiKey)
     }
 }

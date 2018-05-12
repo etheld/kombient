@@ -28,16 +28,16 @@ interface TmdbClient {
     ): TmdbMultiSearchResult
 
     @GetMapping("/3/search/movie?language=en-US&page=1&include_adult=false")
-    fun searchMovieByTitle(
+    fun findMovieByTitle(
         @RequestParam("query") title: String,
         @RequestParam("api_key") apiKey: String
-    ): TmdbSearchResult
+    ): TmdbMovieSearchResult
 
     @GetMapping("/3/search/tv?language=en-US&page=1&include_adult=false")
-    fun searchTVSeriesByTitle(
+    fun findTVByTitle(
         @RequestParam("query") title: String,
         @RequestParam("api_key") apiKey: String
-    ): TmdbSearchResult
+    ): TmdbTVSearchResult
 
     @GetMapping("/3/movie/{id}")
     fun getMovieById(
@@ -144,18 +144,33 @@ interface TmdbClient {
         val name: String
     )
 
-    data class TmdbSearchResult(
+    data class TmdbTVSearchResult(
         val page: Int,
         val total_results: Int,
         val total_pages: Int,
-        val results: List<TmdbSearchSummary>
+        val results: List<TmdbTVSearchSummary>
     )
 
-    data class TmdbSearchSummary(
+    data class TmdbMovieSearchResult(
+        val page: Int,
+        val total_results: Int,
+        val total_pages: Int,
+        val results: List<TmdbMovieSearchSummary>
+    )
+
+    data class TmdbMovieSearchSummary(
         val vote_count: Int,
         val id: Int,
         val video: Boolean,
         val title: String,
+        val popularity: Float,
+        val overview: String
+    )
+
+    data class TmdbTVSearchSummary(
+        val vote_count: Int,
+        val id: Int,
+        val name: String,
         val popularity: Float,
         val overview: String
     )
