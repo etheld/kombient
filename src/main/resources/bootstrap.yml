@@ -2,4 +2,6 @@ spring:
   application.name: kombient
   cloud.vault:
       uri: ${vaultUrl:redacted}
-      token: ${vaultToken:redacted}
+      authentication: kubernetes
+      kubernetes:
+        role: ${kubernetes-role:redacted}
