@@ -171,5 +171,7 @@ task wrapper(type: Wrapper) {
 }
 
 springBoot {
-    buildInfo()
+    buildInfo {
+        version = file('version').text
+    }
 }
