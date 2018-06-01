@@ -21,8 +21,8 @@ class SlackController(
     }
 
     @PostConstruct
-    fun onInit(@Value("\${info.build.version}") version: String) {
-        slackService.sendMessage("#gweli", "Bot starting up. Current version: " + version)
+    fun onInit(@Value("\${info.build.version}") version: String, @Value("\${info.build.time}") time: String) {
+        slackService.sendMessage("#gweli", "Bot starting up. Current version: $version built at $time")
     }
 
     @RequestMapping("/api/events")
