@@ -14,14 +14,16 @@ import javax.annotation.PostConstruct
 class SlackController(
     val slackService: SlackService,
     val executor: TaskExecutor,
-    val botCommands: List<SlackBotCommand>
+    val botCommands: List<SlackBotCommand>,
+    @Value("\${info.build.version}") val version: String,
+    @Value("\${info.build.time}") val time: String
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SlackController::class.java)
     }
 
     @PostConstruct
-    fun onInit(@Value("\${info.build.version}") version: String, @Value("\${info.build.time}") time: String) {
+    fun onInit() {
         slackService.sendMessage("#gweli", "Bot starting up. Current version: $version built at $time")
     }
 
