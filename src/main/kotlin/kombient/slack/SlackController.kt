@@ -3,6 +3,7 @@ package kombient.slack
 import kombient.slack.data.SlackEvent
 import kombient.slack.slackbotcommands.SlackBotCommand
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.task.TaskExecutor
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,8 +21,8 @@ class SlackController(
     }
 
     @PostConstruct
-    fun onInit() {
-        slackService.sendMessage("#gweli", "Bot starting up.")
+    fun onInit(@Value("\${info.build.version}") version: String) {
+        slackService.sendMessage("#gweli", "Bot starting up. Current version: " + version)
     }
 
     @RequestMapping("/api/events")
