@@ -15,8 +15,8 @@ class SlackController(
     val slackService: SlackService,
     val executor: TaskExecutor,
     val botCommands: List<SlackBotCommand>,
-    @Value("\${info.build.version}") val version: String,
-    @Value("\${info.build.time}") val time: String
+    @Value("\${build.version}") val version: String,
+    @Value("\${build.time}") val time: String
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SlackController::class.java)

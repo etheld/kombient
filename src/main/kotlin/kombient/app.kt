@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.annotation.Bean
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
+import org.springframework.core.io.ClassPathResource
 import org.springframework.retry.annotation.EnableRetry
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
@@ -24,6 +26,16 @@ import org.zalando.logbook.Logbook
 @EnableScheduling
 @EnableTransactionManagement
 class Application {
+
+    @Bean
+    fun placeholderConfigurer(): PropertySourcesPlaceholderConfigurer {
+        val propsConfig = PropertySourcesPlaceholderConfigurer()
+        propsConfig.setLocation(ClassPathResource("git.properties"))
+        propsConfig.setLocation(ClassPathResource("META-INF/build-info.properties"))
+        propsConfig.setIgnoreResourceNotFound(false)
+        propsConfig.setIgnoreUnresolvablePlaceholders(true)
+        return propsConfig
+    }
 
     @Bean
     fun taskExecutor(): ThreadPoolTaskExecutor {
