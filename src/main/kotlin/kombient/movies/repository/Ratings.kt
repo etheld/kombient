@@ -47,6 +47,9 @@ data class Rating(
 @Repository
 interface RatingsRepository : JpaRepository<Rating, Long> {
 
+    @Query("SELECT DISTINCT r.imdbId from Rating r")
+    fun findDistinctImdbId(): Set<String>
+
     fun findByImdbId(imdb_id: String): List<Rating>
 
     fun findAllByNameIgnoreCaseOrderByDateDesc(name: String, pageable: Pageable): List<Rating>

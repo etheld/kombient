@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import feign.Logger
 import kombient.movies.parser.ImdbParserConfig
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.openfeign.EnableFeignClients
@@ -25,16 +26,24 @@ import org.zalando.logbook.Logbook
 @EnableRetry
 @EnableScheduling
 @EnableTransactionManagement
+@EntityScan(basePackages = ["kombient"])
 class Application {
 
     @Bean
     fun placeholderConfigurer(): PropertySourcesPlaceholderConfigurer {
         val propsConfig = PropertySourcesPlaceholderConfigurer()
-        propsConfig.setLocation(ClassPathResource("git.properties"))
-        propsConfig.setLocation(ClassPathResource("META-INF/build-info.properties"))
+        addResourceIfExists(propsConfig, "git.properties")
+        addResourceIfExists(propsConfig, "META-INF/build-info.properties")
         propsConfig.setIgnoreResourceNotFound(false)
         propsConfig.setIgnoreUnresolvablePlaceholders(true)
         return propsConfig
+    }
+
+    private fun addResourceIfExists(propsConfig: PropertySourcesPlaceholderConfigurer, propertyPath: String) {
+        val propertyResource = ClassPathResource(propertyPath)
+        if (propertyResource.exists()) {
+            propsConfig.setLocation(propertyResource)
+        }
     }
 
     @Bean

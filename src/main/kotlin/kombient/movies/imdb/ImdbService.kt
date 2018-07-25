@@ -4,6 +4,7 @@ import feign.FeignException
 import feign.RetryableException
 import kombient.movies.repository.RatingsRepository
 import kombient.movies.tmdb.TmdbService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.data.domain.PageRequest
@@ -18,12 +19,17 @@ class ImdbService(
     val tmdbService: TmdbService,
     val ratingsRepository: RatingsRepository
 ) {
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(ImdbService::class.java)
+    }
+
     @Value("\${omdbApiKey}")
     private lateinit var apiKey: String
 
     @Retryable(value = [FeignException::class, RetryableException::class, SocketTimeoutException::class], maxAttemptsExpression = "5")
     fun getMovieById(imdbId: String): ImdbClient.ImdbMovie {
-        println("Fetching $imdbId")
+        LOGGER.info("Fetching $imdbId")
         return imdbClient.getMovieById(imdbId, apiKey)
     }
 

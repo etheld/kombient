@@ -14,9 +14,9 @@ interface ImdbClient {
 
     data class ImdbMovie(
         val Title: String,
-        val Year: Int,
+        val Year: String,
         val Plot: String,
-        val Ratings: Array<Rating>,
+        val Ratings: List<Rating>,
         val imdbRating: String,
         val imdbVotes: String,
         val Type: String,
@@ -25,7 +25,7 @@ interface ImdbClient {
         val imdbID: String
     ) {
         override fun toString(): String {
-            return String.format("[IMDb] %s(%d) %s/10 from %s votes %s [%s] http://www.imdb.com/title/%s",
+            return String.format("[IMDb] %s(%s) %s/10 from %s votes %s [%s] http://www.imdb.com/title/%s",
                 Title,
                 Year,
                 imdbRating,
