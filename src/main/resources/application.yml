@@ -27,7 +27,6 @@ spring:
     password: ${jdbcPassword:redacted}
     driver-class-name: org.postgresql.Driver
 
-logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 management:
   endpoints:
     web:
@@ -51,8 +50,11 @@ feign:
 logging:
   level:
     org.hibernate.SQL: debug
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
     kombient: INFO
     kombient.movies.tmdb.TmdbClient: DEBUG
+    kombient.movies.imdb.ImdbClient: DEBUG
+
 
 dns.health.hostnames: google.com,postgres
 
@@ -77,5 +79,5 @@ imdbparser:
 
 
 moviemetadata:
-  frequency: 30000
+  frequency: 120000
   delay: 10000
