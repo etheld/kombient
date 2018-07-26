@@ -35,5 +35,4 @@ class WastedTimeBotCommand(
         }
         return Optional.of("Could not find the user")
     }
-
 }
