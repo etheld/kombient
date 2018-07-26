@@ -38,11 +38,13 @@ class MovieMetaDataService(
             when {
                 "series" == imdbMovie.Type.toLowerCase() -> {
                     val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
-                    movieMetaDataRepository.save(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, Instant.now(), tmdbSeries.runtime))
+                    val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
+                    movieMetaDataRepository.save(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, votes, Instant.now(), tmdbSeries.runtime))
                 }
                 "movie" == imdbMovie.Type.toLowerCase() -> {
                     val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
-                    movieMetaDataRepository.save(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, Instant.now(), tmdbMovie.runtime))
+                    val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
+                    movieMetaDataRepository.save(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, votes, Instant.now(), tmdbMovie.runtime))
                 }
             }
         }

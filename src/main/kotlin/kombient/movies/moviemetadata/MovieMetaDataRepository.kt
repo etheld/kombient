@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository
 interface MovieMetaDataRepository : JpaRepository<MovieMetaData, String> {
     @Query("SELECT DISTINCT m.imdbId from MovieMetaData m")
     fun findDistinctImdbId(): Set<String>
+
+    fun findByImdbId(imdbId: String): MovieMetaData?
 }
