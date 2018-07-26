@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
+import java.time.LocalDate
 
 @FeignClient(name = "tmdb", url = "https://api.themoviedb.org")
 interface TmdbClient {
@@ -131,7 +132,7 @@ interface TmdbClient {
         override fun toString(): String {
             return String.format("[IMDb] %s(%s) %s mins [%s]",
                 title,
-                release_date,
+                LocalDate.parse(release_date).year,
                 runtime,
                 genres.joinToString(", ") { it.name })
         }
