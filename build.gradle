@@ -21,7 +21,6 @@ buildscript {
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
-    id 'org.jmailen.kotlinter' version '1.15.1'
     id "com.gorylenko.gradle-git-properties" version "1.5.1"
 }
 
