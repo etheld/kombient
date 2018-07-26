@@ -73,9 +73,9 @@ imdb:
 
 imdbparser:
   frequency: 1200000
-  delay: 1000
+  delay: 10000
 
 
 moviemetadata:
-  frequency: 1200000
+  frequency: 30000
   delay: 10000
