@@ -31,6 +31,7 @@ class MovieMetaDataService(
 
         val newImdbIds = ratingImdbs.minus(metadataImdbs)
 
+        LOGGER.info("Searching for these imdbids: $newImdbIds")
         newImdbIds.forEach {
             val imdbMovie = imdbService.getMovieById(it)
             val tmdbMovieSearchResult = tmdbService.findMovieByImdbId(it)
