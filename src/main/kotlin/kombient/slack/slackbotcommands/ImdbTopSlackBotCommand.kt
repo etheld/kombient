@@ -21,7 +21,7 @@ class ImdbTopSlackBotCommand(
             val imdbTopX = userRatingService.getImdbTopX(topX.toIntOrNull() ?: 10)
             val joinToString = imdbTopX
                 .sortedBy { it["values"] }
-                .joinToString(separator = ", ", transform = { "${it["name"]}(${it["votes"]})" })
+                .joinToString(separator = ", ", transform = { "${it["name"]}(${it["votes"].toString()})" })
             return Optional.of(joinToString)
         }
         return Optional.empty()
