@@ -129,11 +129,9 @@ interface TmdbClient {
         val vote_average: Float
     ) {
         override fun toString(): String {
-            return String.format("[IMDb] %s(%s) %s/10 from %s votes %s mins [%s]",
+            return String.format("[IMDb] %s(%s) %s mins [%s]",
                 title,
                 release_date,
-                vote_average,
-                vote_count,
                 runtime,
                 genres.joinToString(", ") { it.name })
         }

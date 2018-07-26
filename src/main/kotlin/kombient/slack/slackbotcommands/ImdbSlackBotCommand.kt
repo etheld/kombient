@@ -39,7 +39,7 @@ class ImdbSlackBotCommand(
                 return Optional.of(prefix + top90PercentMatches
                     .map { tmdbService.getMovieById(it.first.id) }
                     .joinToString("\n") { tmdbMovie ->
-                        String.format("%s https://imdb.com/title/%s %s", tmdbMovie, tmdbMovie.imdb_id, movieUserRatingService.getUserRatingsForImdbMovie(tmdbMovie.imdb_id))
+                        String.format("%s https://imdb.com/title/%s tmdb: %s(%s), %s", tmdbMovie, tmdbMovie.imdb_id, tmdbMovie.vote_average, tmdbMovie.vote_count, movieUserRatingService.getUserRatingsForImdbMovie(tmdbMovie.imdb_id))
                     }
                 )
             }
