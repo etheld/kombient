@@ -89,6 +89,9 @@ class ImdbParser(
             }
             val nextLink = get.select("a.next-page").attr("href")
             println("link: $username " + get.select("a.next-page"))
+            if (nextLink == "#" || nextLink == "" || nextLink.isEmpty()) {
+                break
+            }
             get = Jsoup.connect("http://www.imdb.com/$nextLink")
                 .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
                 .maxBodySize(MAX_BODY_SIZE_30M)
