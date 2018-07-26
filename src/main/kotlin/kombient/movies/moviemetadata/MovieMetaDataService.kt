@@ -40,7 +40,7 @@ class MovieMetaDataService(
                     val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
                     movieMetaDataRepository.save(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, Instant.now(), tmdbSeries.runtime))
                 }
-                else -> {
+                "movie" == imdbMovie.Type.toLowerCase() -> {
                     val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
                     movieMetaDataRepository.save(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, Instant.now(), tmdbMovie.runtime))
                 }

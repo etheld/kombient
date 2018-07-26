@@ -43,7 +43,6 @@ class ImdbParser(
     fun parseImdb() {
 
         imdbParserConfig.userconfig.forEach { (username, userId) ->
-            //            val latestMovieVotes = getLatestMovieVotes(userId, username).take(10)
             val latestMovieVotes = getLatestMovieVotes(userId, username)
 
             val imdbIds = latestMovieVotes.map { it.imdbId }.toList()
