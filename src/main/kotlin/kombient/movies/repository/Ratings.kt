@@ -55,6 +55,7 @@ interface RatingsRepository : JpaRepository<Rating, Long> {
     fun findAllByNameIgnoreCaseOrderByDateDesc(name: String, pageable: Pageable): List<Rating>
 
     fun findAllByNameAndImdbIdIn(name: String, imdbId: List<String>): List<Rating>
+    fun findAllByNameIgnoreCase(name: String): List<Rating>
 
     @Query("select r.name as name,count(r.vote) as votes from Rating r group by r.name order by votes desc")
     fun findTopXRaters(pageable: Pageable): List<Map<String, String>>
