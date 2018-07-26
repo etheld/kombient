@@ -31,26 +31,33 @@ class MovieMetaDataService(
 
         val newImdbIds = ratingImdbs.minus(metadataImdbs)
 
+
+
+
         LOGGER.info("Searching for these imdbids: $newImdbIds")
-        newImdbIds.forEach {
-            val imdbMovie = imdbService.getMovieById(it)
-            val tmdbMovieSearchResult = tmdbService.findMovieByImdbId(it)
-            LOGGER.info("Processing: $it")
-            when {
-                "series" == imdbMovie.Type.toLowerCase() -> {
-                    if (!tmdbMovieSearchResult.tv_results.isEmpty()) {
-                        val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
-                        val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
-                        movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, votes, Instant.now(), tmdbSeries.runtime))
+        newImdbIds.minus(listOf("tt6201938")).forEach {
+            try {
+                val imdbMovie = imdbService.getMovieById(it)
+                val tmdbMovieSearchResult = tmdbService.findMovieByImdbId(it)
+                LOGGER.info("Processing: $it")
+                when {
+                    "series" == imdbMovie.Type.toLowerCase() -> {
+                        if (!tmdbMovieSearchResult.tv_results.isEmpty()) {
+                            val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
+                            val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
+                            movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, votes, Instant.now(), tmdbSeries.runtime))
+                        }
+                    }
+                    "movie" == imdbMovie.Type.toLowerCase() -> {
+                        if (!tmdbMovieSearchResult.movie_results.isEmpty()) {
+                            val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
+                            val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
+                            movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, votes, Instant.now(), tmdbMovie.runtime))
+                        }
                     }
                 }
-                "movie" == imdbMovie.Type.toLowerCase() -> {
-                    if (!tmdbMovieSearchResult.movie_results.isEmpty()) {
-                        val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
-                        val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
-                        movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, votes, Instant.now(), tmdbMovie.runtime))
-                    }
-                }
+            } catch (e: Exception) {
+                LOGGER.error("Error found", e)
             }
         }
     }
