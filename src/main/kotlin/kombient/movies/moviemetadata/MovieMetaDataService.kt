@@ -38,14 +38,18 @@ class MovieMetaDataService(
             LOGGER.info("Processing: $it")
             when {
                 "series" == imdbMovie.Type.toLowerCase() -> {
-                    val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
-                    val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
-                    movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, votes, Instant.now(), tmdbSeries.runtime))
+                    if (!tmdbMovieSearchResult.tv_results.isEmpty()) {
+                        val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
+                        val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
+                        movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, votes, Instant.now(), tmdbSeries.runtime))
+                    }
                 }
                 "movie" == imdbMovie.Type.toLowerCase() -> {
-                    val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
-                    val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
-                    movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, votes, Instant.now(), tmdbMovie.runtime))
+                    if (!tmdbMovieSearchResult.movie_results.isEmpty()) {
+                        val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
+                        val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
+                        movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, votes, Instant.now(), tmdbMovie.runtime))
+                    }
                 }
             }
         }
