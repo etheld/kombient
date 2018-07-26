@@ -8,14 +8,19 @@ spring:
       ddl-auto: update
     show-sql: true
 
-  jpa.properties:
-    hibernate:
+    properties:
+      hibernate:
 
-      use_sql_comments: false
-      format_sql: false
-      type: trace
-      temp:
-        use_jdbc_metadata_defaults: false
+        use_sql_comments: false
+        format_sql: false
+        type: trace
+        temp:
+          use_jdbc_metadata_defaults: false
+        jdbc:
+          batch_size: 100
+          order_inserts: true
+          order_updates: true
+          batch_versioned_data: true
 
   datasource:
     url: ${jdbcUrl:redacted}
