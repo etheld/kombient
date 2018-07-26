@@ -117,16 +117,17 @@ class ImdbParser(
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun saveMoviesInTheDatabase(nonMolcsaRatings: List<Rating>, molcsaRatings: List<Rating>, username: String) {
-        nonMolcsaRatings
-            .plus(molcsaRatings)
-            .forEach { ratingsRepository.save(it) }
+        ratingsRepository.saveAll(nonMolcsaRatings.plus(molcsaRatings))
+//        nonMolcsaRatings
+//            .plus(molcsaRatings)
+//            .forEach { ratingsRepository.save(it) }
         ratingsRepository.flush()
-        if (molcsaRatings.isNotEmpty()) {
-            notifySlackWithRatings(molcsaRatings, username, "molcsa")
-        }
-        if (nonMolcsaRatings.isNotEmpty()) {
-            notifySlackWithRatings(nonMolcsaRatings, username, "")
-        }
+//        if (molcsaRatings.isNotEmpty()) {
+//            notifySlackWithRatings(molcsaRatings, username, "molcsa")
+//        }
+//        if (nonMolcsaRatings.isNotEmpty()) {
+//            notifySlackWithRatings(nonMolcsaRatings, username, "")
+//        }
     }
 
     private fun notifySlackWithRatings(molcsaRatings: List<Rating>, username: String, prefix: String) {
