@@ -44,7 +44,7 @@ class ImdbParser(
 
         imdbParserConfig.userconfig.forEach { (username, userId) ->
             //            val latestMovieVotes = getLatestMovieVotes(userId, username).take(10)
-            val latestMovieVotes = getAllMovies(userId, username)
+            val latestMovieVotes = getLatestMovieVotes(userId, username)
 
             val imdbIds = latestMovieVotes.map { it.imdbId }.toList()
             val existingRatings = ratingsRepository.findAllByNameAndImdbIdIn(username, imdbIds)
@@ -64,40 +64,6 @@ class ImdbParser(
             LOGGER.info("New ratings: $nonMolcsaRatings")
             saveMoviesInTheDatabase(nonMolcsaRatings, molcsaRatings, username)
         }
-    }
-
-    private fun getAllMovies(userid: String, username: String): List<Rating> {
-
-        var get = Jsoup
-            .connect("http://www.imdb.com/user/$userid/ratings?ref_=nv_usr_rt_4")
-            .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
-            .maxBodySize(MAX_BODY_SIZE_30M)
-            .get()
-
-        val ratings: MutableList<Rating> = ArrayList()
-
-        do {
-
-            val movieBase = get.select("#ratings-container div.lister-item.mode-detail")
-
-            ratings += movieBase.map {
-                val imdbId = it.select("div.lister-item-image").first().attr("data-tconst")
-                val vote = it.select("div.lister-item-content div.ipl-rating-widget div.ipl-rating-star--other-user span.ipl-rating-star__rating").first().text()
-                val date = it.select("div.lister-item-content div.ipl-rating-widget + p").first().text().removePrefix("Rated on ")
-                val zonedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd MMM uuuu"))
-                Rating(imdbId = imdbId, vote = vote.toInt(), date = zonedDate, name = username)
-            }
-            val nextLink = get.select("a.next-page").attr("href")
-            println("link: $username " + get.select("a.next-page"))
-            if (nextLink == "#" || nextLink == "" || nextLink.isEmpty()) {
-                break
-            }
-            get = Jsoup.connect("http://www.imdb.com/$nextLink")
-                .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36")
-                .maxBodySize(MAX_BODY_SIZE_30M)
-                .get()
-        } while (nextLink != "#" || nextLink == "")
-        return ratings
     }
 
     private fun getLatestMovieVotes(userid: String, username: String): List<Rating> {
@@ -121,20 +87,17 @@ class ImdbParser(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun saveMoviesInTheDatabase(nonMolcsaRatings: List<Rating>, molcsaRatings: List<Rating>, username: String) {
         ratingsRepository.saveAll(nonMolcsaRatings.plus(molcsaRatings))
-//        nonMolcsaRatings
-//            .plus(molcsaRatings)
-//            .forEach { ratingsRepository.save(it) }
         ratingsRepository.flush()
-//        if (molcsaRatings.isNotEmpty()) {
-//            notifySlackWithRatings(molcsaRatings, username, "molcsa")
-//        }
-//        if (nonMolcsaRatings.isNotEmpty()) {
-//            notifySlackWithRatings(nonMolcsaRatings, username, "")
-//        }
+        if (molcsaRatings.isNotEmpty()) {
+            notifySlackWithRatings(molcsaRatings, username, "molcsa")
+        }
+        if (nonMolcsaRatings.isNotEmpty()) {
+            notifySlackWithRatings(nonMolcsaRatings, username, "")
+        }
     }
 
     private fun notifySlackWithRatings(molcsaRatings: List<Rating>, username: String, prefix: String) {
         val titles = molcsaRatings.map { tmdbService.getTitleByImdbId(it.imdbId) + "(${it.vote})" }.joinToString(separator = ", ") { it }
-//        slackService.sendMessage(imdbParserConfig.channel, "$username ${prefix}voted: $titles")
+        slackService.sendMessage(imdbParserConfig.channel, "$username ${prefix}voted: $titles")
     }
 }
