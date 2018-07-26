@@ -3,9 +3,9 @@ package kombient.movies.imdb
 import kombient.movies.tmdb.TmdbService
 import org.springframework.beans.factory.annotation.Autowired
 
-//@SpringBootTest(classes = [Application::class])
-//@ActiveProfiles("dev")
-//@ExtendWith(SpringExtension::class)
+// @SpringBootTest(classes = [Application::class])
+// @ActiveProfiles("dev")
+// @ExtendWith(SpringExtension::class)
 internal class TmdbServiceTest {
 
     @Autowired
