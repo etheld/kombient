@@ -73,7 +73,6 @@ compileTestKotlin {
     }
 }
 
-
 sourceSets {
     main.kotlin.srcDirs 'src/main/kotlin'
     test.kotlin.srcDirs 'src/test/kotlin'
@@ -87,7 +86,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         javaParameters = true
     }
 }
-
 
 idea {
     module {
