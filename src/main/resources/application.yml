@@ -13,7 +13,6 @@ spring:
 
         use_sql_comments: false
         format_sql: false
-        type: trace
         temp:
           use_jdbc_metadata_defaults: false
         jdbc:
@@ -52,9 +51,7 @@ feign:
 logging:
   level:
     org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
     kombient: INFO
-    org.springframework.transaction: trace
     kombient.movies.tmdb.TmdbClient: DEBUG
 
 dns.health.hostnames: google.com,postgres
