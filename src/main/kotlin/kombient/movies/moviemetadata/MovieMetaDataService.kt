@@ -31,9 +31,6 @@ class MovieMetaDataService(
 
         val newImdbIds = ratingImdbs.minus(metadataImdbs)
 
-
-
-
         LOGGER.info("Searching for these imdbids: $newImdbIds")
         newImdbIds.minus(listOf("tt6201938")).forEach {
             try {
@@ -46,6 +43,8 @@ class MovieMetaDataService(
                             val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
                             val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
                             movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbSeries.vote_average, votes, Instant.now(), tmdbSeries.runtime))
+                        } else {
+                            movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), null, null, Instant.now(), 0))
                         }
                     }
                     "movie" == imdbMovie.Type.toLowerCase() -> {
@@ -53,6 +52,8 @@ class MovieMetaDataService(
                             val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
                             val votes = imdbMovie.imdbVotes.replace(",", "").toIntOrNull()
                             movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), tmdbMovie.vote_average, votes, Instant.now(), tmdbMovie.runtime))
+                        } else {
+                            movieMetaDataRepository.saveAndFlush(MovieMetaData(it, imdbMovie.Title, imdbMovie.imdbRating.toFloatOrNull(), null, null, Instant.now(), 0))
                         }
                     }
                 }
