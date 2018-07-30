@@ -17,7 +17,6 @@ data class MovieMetaData(
     val imdbId: String,
     val title: String,
     val imdbRating: Float?,
-    val tmdbRating: Float?,
     val imdbVotes: Int?,
     val lastUpdated: Instant,
     val runTime: Long

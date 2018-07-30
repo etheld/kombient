@@ -12,7 +12,7 @@ import java.util.Optional
  * @author Peter Varsanyi (pevarsanyi@expedia.com)
  */
 @Component
-class WastedTimeBotCommand(
+class WastedBotCommand(
     private val movieMetaDataRepository: MovieMetaDataRepository
 ) : SlackBotCommand {
 
