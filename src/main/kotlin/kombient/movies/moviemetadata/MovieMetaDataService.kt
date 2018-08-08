@@ -71,21 +71,32 @@ class MovieMetaDataService(
                     val imdbMovie = imdbService.getMovieById(it.imdbId)
                     val tmdbMovieSearchResult = tmdbService.findMovieByImdbId(it.imdbId)
                     LOGGER.info("Processing: $it")
+
+                    val yearRegex = Regex("^([0-9]+)")
+                    val yearMatch = yearRegex.matchEntire(imdbMovie.Year)
+
+                    val year = when {
+                        yearMatch != null -> yearMatch.destructured.component1().toInt()
+                        else -> 0
+                    }
+
+                    val movieMetaData = it.copy(title = imdbMovie.Title, imdbRating = imdbMovie.imdbRating.toFloatOrNull(), lastUpdated = Instant.now(), year = year)
+
                     when {
                         "series" == imdbMovie.Type.toLowerCase() -> {
                             if (!tmdbMovieSearchResult.tv_results.isEmpty()) {
                                 val tmdbSeries = tmdbService.getTvById(tmdbMovieSearchResult.tv_results.first().id)
-                                movieMetaDataRepository.saveAndFlush(it.copy(title = imdbMovie.Title, imdbRating = imdbMovie.imdbRating.toFloatOrNull(), runTime = tmdbSeries.runtime, lastUpdated = Instant.now()))
+                                movieMetaDataRepository.saveAndFlush(movieMetaData.copy(runTime = tmdbSeries.runtime, lastUpdated = Instant.now()))
                             } else {
-                                movieMetaDataRepository.saveAndFlush(it.copy(title = imdbMovie.Title, imdbRating = imdbMovie.imdbRating.toFloatOrNull(), runTime = 0, lastUpdated = Instant.now()))
+                                movieMetaDataRepository.saveAndFlush(movieMetaData)
                             }
                         }
                         "movie" == imdbMovie.Type.toLowerCase() -> {
                             if (!tmdbMovieSearchResult.movie_results.isEmpty()) {
                                 val tmdbMovie = tmdbService.getMovieById(tmdbMovieSearchResult.movie_results.first().id)
-                                movieMetaDataRepository.saveAndFlush(it.copy(title = imdbMovie.Title, imdbRating = imdbMovie.imdbRating.toFloatOrNull(), runTime = tmdbMovie.runtime, lastUpdated = Instant.now()))
+                                movieMetaDataRepository.saveAndFlush(movieMetaData.copy(runTime = tmdbMovie.runtime))
                             } else {
-                                movieMetaDataRepository.saveAndFlush(it.copy(title = imdbMovie.Title, imdbRating = imdbMovie.imdbRating.toFloatOrNull(), runTime = 0, lastUpdated = Instant.now()))
+                                movieMetaDataRepository.saveAndFlush(movieMetaData)
                             }
                         }
                         else -> blackList(it, "Tye is not movie or series: ${imdbMovie.Type}: $imdbMovie")
@@ -115,6 +126,6 @@ class MovieMetaDataService(
 
     @Transactional
     fun saveNewImdbsPlaceholder(newImdbIds: Set<String>) {
-        movieMetaDataRepository.saveAll(newImdbIds.map { MovieMetaData(it, "placeholder", null, null, LocalDate.of(1970, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC), 0) })
+        movieMetaDataRepository.saveAll(newImdbIds.map { MovieMetaData(it, "placeholder", null, null, LocalDate.of(1970, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC), 0, 0) })
     }
 }
