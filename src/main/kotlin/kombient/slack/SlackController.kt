@@ -1,5 +1,6 @@
 package kombient.slack
 
+import io.micrometer.core.annotation.Timed
 import kombient.slack.data.SlackEvent
 import kombient.slack.slackbotcommands.SlackBotCommand
 import org.slf4j.LoggerFactory
@@ -27,6 +28,7 @@ class SlackController(
         slackService.sendMessage("#gweli", "Bot starting up. Current version: $version built at $time")
     }
 
+    @Timed
     @RequestMapping("/api/events")
     fun event(@RequestBody event: SlackEvent): String {
         executor.execute({
