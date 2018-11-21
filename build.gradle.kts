@@ -100,5 +100,8 @@ tasks {
             jvmTarget = VERSION_1_8.toString()
         }
     }
+    withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
