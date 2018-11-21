@@ -83,7 +83,7 @@ class Application {
 
 open class SpringProfiles {
     companion object {
-        const val FNT = "FNT"
+        const val FNT = "fnt"
     }
 }
 
