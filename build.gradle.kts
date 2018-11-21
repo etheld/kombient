@@ -73,6 +73,7 @@ dependencies {
     testRuntime("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
     testRuntime("org.junit.jupiter:junit-jupiter-engine")
     testRuntime("org.junit.platform:junit-platform-engine")
+    testRuntime("com.h2database:h2")
 
 
     runtime("org.postgresql:postgresql")

@@ -1,0 +1,5 @@
+spring:
+  application.name: kombient
+  cloud:
+    vault:
+      enabled: false

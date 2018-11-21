@@ -81,6 +81,12 @@ class Application {
     }
 }
 
+open class SpringProfiles {
+    companion object {
+        const val FNT = "FNT"
+    }
+}
+
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
 }
