@@ -87,24 +87,14 @@ dependencies {
 
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        languageVersion = "1.2"
-        apiVersion = "1.2"
-        javaParameters = true
-        jvmTarget = VERSION_1_8.toString()
-    }
-}
-
-application {
-    mainClassName = "kombient.Application"
-}
-
 kotlin {
     experimental {
         coroutines = Coroutines.ENABLE
     }
+}
+
+application {
+    mainClassName = "kombient.ApplicationKt"
 }
 
 springBoot {
@@ -112,3 +102,16 @@ springBoot {
         version = file("version").readText()
     }
 }
+
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            languageVersion = "1.2"
+            apiVersion = "1.2"
+            javaParameters = true
+            jvmTarget = VERSION_1_8.toString()
+        }
+    }
+}
+
