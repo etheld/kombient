@@ -1,13 +1,5 @@
-import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.gradle.api.JavaVersion.VERSION_1_8
-import org.jetbrains.kotlin.contracts.model.structure.UNKNOWN_COMPUTATION.type
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import org.springframework.boot.gradle.dsl.SpringBootExtension
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-import org.springframework.boot.gradle.tasks.run.BootRun
-import org.springframework.core.env.PropertySource.named
 
 plugins {
     val kotlinVersion = "1.3.10"
@@ -87,12 +79,6 @@ dependencies {
 
 }
 
-kotlin {
-    experimental {
-        coroutines = Coroutines.ENABLE
-    }
-}
-
 application {
     mainClassName = "kombient.ApplicationKt"
 }
@@ -107,8 +93,8 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            languageVersion = "1.2"
-            apiVersion = "1.2"
+            languageVersion = "1.3"
+            apiVersion = "1.3"
             javaParameters = true
             jvmTarget = VERSION_1_8.toString()
         }
