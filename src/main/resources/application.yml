@@ -44,9 +44,9 @@ management:
     web:
       exposure:
         include:
-        - health
-        - info
-        - prometheus
+          - health
+          - info
+          - prometheus
 
 feign:
   client:
@@ -66,7 +66,7 @@ dns.health.hostnames: google.com,postgres
 
 imdb:
   similarityscore: 0.85
-  channel: '#secrettchannel'
+  channel: '#diablo_iii'
   userconfig:
     Gweli: ur24140816
     Warc: ur24043276
