@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Primary
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.core.io.ClassPathResource
 import org.springframework.retry.annotation.EnableRetry
@@ -47,6 +48,7 @@ class Application {
     }
 
     @Bean
+    @Primary
     fun taskExecutor(): ThreadPoolTaskExecutor {
         val threadPoolTaskExecutor = ThreadPoolTaskExecutor()
         threadPoolTaskExecutor.corePoolSize = 5
