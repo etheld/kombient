@@ -1,5 +1,6 @@
 import org.gradle.api.JavaVersion.VERSION_1_8
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     val kotlinVersion = "1.3.10"
@@ -91,6 +92,13 @@ springBoot {
 }
 
 tasks {
+    withType<Wrapper> {
+        distributionType = Wrapper.DistributionType.ALL
+        gradleVersion = "5.0"
+    }
+    withType<BootRun> {
+        systemProperties = System.getProperties().mapKeysTo(mutableMapOf()) { it.key.toString() }
+    }
     withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
